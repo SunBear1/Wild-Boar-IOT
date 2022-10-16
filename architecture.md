@@ -1,4 +1,5 @@
-# MICROSERVICES
+# Wild-Boar-IOT
+Projekt na przedmiot Serwisy Internetowe .NET
 
 ## GUI
 ### Vue.js (Łukasz)
