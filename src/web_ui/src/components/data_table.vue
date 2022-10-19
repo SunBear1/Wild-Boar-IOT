@@ -1,14 +1,14 @@
 <template>
   <nav class="navbar">
-    <h3>Wild boar IOT</h3>
+    <h3> {{ NAV_TITLE }}</h3>
     <button>
-      <span>Dashboard</span>
+      <span> {{ NAV_DASHBOARD_TITLE }}</span>
     </button>
     <button>
-      <span>Sensor data</span>
+      <span>{{ NAV_TABLE_TITLE }}</span>
     </button>
   </nav>
-  <h1 class="main-title">{{ TITLE }}</h1>
+  <h1 class="main-title">{{ TABLE_TITLE }}</h1>
   <div>
     <table class="table-root">
       <tr>
@@ -31,8 +31,7 @@
 </template>
 
 <script setup lang="ts">
-const TITLE: string = "Data from sensors";
-
+import { TABLE_TITLE, NAV_TABLE_TITLE, NAV_TITLE, NAV_DASHBOARD_TITLE} from "@/constants/texts";
 </script>
 
 
