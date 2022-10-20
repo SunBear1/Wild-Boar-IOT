@@ -20,7 +20,7 @@ strony, wartości odświeżają  się samodzielnie po zarejestrowaniu nowej wart
 4. Eksport danych (przefiltrowanych, sortowanych) w formacie CSV, JSON
 
 ## DATABASE
-### MondoDB (Łukasz(dzik))
+### MondoDB (Łukasz)
 1. Storowanie danych z API
 
 
