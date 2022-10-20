@@ -1,4 +1,4 @@
-FROM rabbitmq:latest
+FROM rabbitmq:latest as build-stage
 
 WORKDIR /rabbitmq_data
 
