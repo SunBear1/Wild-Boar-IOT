@@ -22,7 +22,7 @@
         <td>Germany</td>
       </tr>
       <tr>
-        <td>Centro comercial Moctezuma</td>
+        <td>Centro comerciala</td>
         <td>Francisco Chang</td>
         <td>Mexico</td>
       </tr>
@@ -44,6 +44,19 @@ import { TABLE_TITLE, NAV_TABLE_TITLE, NAV_TITLE, NAV_DASHBOARD_TITLE} from "@/c
     margin-top: 50px;
     margin-left:auto;
     margin-right:auto;
+    border-collapse: separate;
+    border-spacing: 2px;
+    border: 1px solid black;
+  }
+  th, tr{
+    border: 1px solid black;
+  }
+  td {
+    padding: 6px;
+    border: 1px solid black;
+  }
+  .table-column{
+    border: 1px solid black;
   }
   .navbar {
     display: flex;
