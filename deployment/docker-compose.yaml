@@ -16,3 +16,8 @@ services:
     image: ${MONGODB_IMAGE_TAG}
     ports:
       - "27017:27017"
+  data_generator:
+    container_name: data_generator
+    image: ${DATA_GENERATOR_IMAGE_TAG}
+    ports:
+      - "7007:7007"

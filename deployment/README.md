@@ -6,7 +6,8 @@ All commands must be run from `/deployment` directory
 `export WEB_UI_IMAGE_TAG=frontend/vue-app`\
 `export API_IMAGE_TAG=backend/dotnet-core`\
 `export RABBITMQ_IMAGE_TAG=message-broker/rabbitmq`\
-`export MONGODB_IMAGE_TAG=database/mongodb`
+`export MONGODB_IMAGE_TAG=database/mongodb`\
+`export DATA_GENERATOR_IMAGE_TAG=data-generator/fastapi`
 2. Run script `./build_images.sh` (you can confirm that every image was built by running command `docker images`)
 3. Run `sudo -E docker-compose up`
 
