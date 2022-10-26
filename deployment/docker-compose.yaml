@@ -11,6 +11,7 @@ services:
     image: ${RABBITMQ_IMAGE_TAG}
     ports:
      - "15672:15672"
+     - "5672:5672"
   database:
     container_name: mongodb
     image: ${MONGODB_IMAGE_TAG}
@@ -21,3 +22,5 @@ services:
     image: ${DATA_GENERATOR_IMAGE_TAG}
     ports:
       - "7007:7007"
+    depends_on:
+    - message-broker
