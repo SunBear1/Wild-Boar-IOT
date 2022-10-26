@@ -1,5 +1,6 @@
-import time
 import random
+import time
+
 from rabbitmq_client import RabbitMQClient
 
 RabbitMQClient.create_connection()
