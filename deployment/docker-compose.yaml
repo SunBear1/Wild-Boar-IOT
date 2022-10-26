@@ -6,12 +6,17 @@ services:
     image: ${WEB_UI_IMAGE_TAG}
     ports:
       - "80:80"
-  message-broker:
+  message_broker:
     container_name: rabbitmq
     image: ${RABBITMQ_IMAGE_TAG}
     ports:
-     - "15672:15672"
-     - "5672:5672"
+      - "15672:15672"
+      - "5672:5672"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:15672"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
   database:
     container_name: mongodb
     image: ${MONGODB_IMAGE_TAG}
@@ -20,7 +25,6 @@ services:
   data_generator:
     container_name: data_generator
     image: ${DATA_GENERATOR_IMAGE_TAG}
-    ports:
-      - "7007:7007"
     depends_on:
-    - message-broker
+      message_broker:
+        condition: service_healthy

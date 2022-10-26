@@ -7,5 +7,6 @@ RUN pip install --upgrade pip
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
 COPY . .
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "7007"]
-EXPOSE 7007
+# CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "7007"]
+CMD ["python3", "main.py"]
+# EXPOSE 7007

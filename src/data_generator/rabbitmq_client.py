@@ -1,6 +1,10 @@
 import pika
 
-from constants import USERNAME, PASSWORD, VHOST, PORT, HOST
+USERNAME = "admin"
+PASSWORD = "1234"
+VHOST = "/vhost1"
+PORT = 5672
+HOST = "message_broker"
 
 
 class RabbitMQClient:
