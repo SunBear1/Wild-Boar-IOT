@@ -9,3 +9,7 @@ echo "Finished building rabbitMQ image"
 echo "Building mongoDB image..."
 cd ../src/mongodb; docker build -t $MONGODB_IMAGE_TAG .; cd ..
 echo "Finished building mongoDB image"
+
+echo "Building data_generator image..."
+cd ../src/data_generator; docker build -t $DATA_GENERATOR_IMAGE_TAG .; cd ..
+echo "Finished building data_generator image"
