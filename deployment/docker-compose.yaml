@@ -1,0 +1,18 @@
+version: '3.4'
+
+services:
+  web_ui:
+    container_name: web_ui
+    image: ${WEB_UI_IMAGE_TAG}
+    ports:
+      - "80:80"
+  message-broker:
+    container_name: rabbitmq
+    image: ${RABBITMQ_IMAGE_TAG}
+    ports:
+     - "15672:15672"
+  database:
+    container_name: mongodb
+    image: ${MONGODB_IMAGE_TAG}
+    ports:
+      - "27017:27017"
