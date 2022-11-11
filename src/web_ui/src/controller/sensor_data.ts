@@ -1,4 +1,5 @@
 import axios from "axios";
+import {API_URL} from "@/constants/endpoints";
 
 export type SensorType = {
     id: string
@@ -8,7 +9,7 @@ export type SensorType = {
 
 export async function get_sensor_data_from_api() {
     try {
-        const response = await axios.get("https://mocki.io/v1/62f644b3-1e57-4401-b0ae-5693b98be671");
+        const response = await axios.get(API_URL);
         let sensor_data: SensorType[] = []
         for (let i = 0; i < response.data.length; i++) {
             const data: SensorType = {

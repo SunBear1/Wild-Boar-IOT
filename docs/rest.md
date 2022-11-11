@@ -1,9 +1,7 @@
 # REST API
 
 ### All sensor data endpoint
-
-#### /api/v1/data
-
+#### GET /api/v1/data
 Endpoint response payload should follow schema described below:
 ```json
 [
@@ -27,4 +25,14 @@ Data types:
 - weight: Int
 - occupancy: Bool
 
-Please keep this in mind when creating API endpoint and request in GUI
+### Status endpoint
+
+#### GET /api/v1/status
+
+Endpoint response payload should follow schema described below:
+
+```
+API is listening
+```
+
+Whole payload is a simple string

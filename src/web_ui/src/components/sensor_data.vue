@@ -57,16 +57,19 @@ onMounted(async () => {
     border-spacing: 2px;
     border: 1px solid black;
   }
-  th, tr{
+
+  th, tr {
     border: 1px solid black;
   }
+
   td {
     padding: 6px;
     border: 1px solid black;
   }
-  .table-column{
-    border: 1px solid black;
-  }
+
+  /*.table-column{*/
+  /*  border: 1px solid black;*/
+  /*}*/
   .navbar {
     display: flex;
     align-items: center;
