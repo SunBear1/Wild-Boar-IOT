@@ -8,30 +8,39 @@
       <span>{{ NAV_TABLE_TITLE }}</span>
     </button>
   </nav>
+  <br>
   <h1 class="main-title">{{ TABLE_TITLE }}</h1>
   <div>
     <table class="table-root">
       <tr>
-        <th>Company</th>
-        <th>Contact</th>
-        <th>Country</th>
+        <th>ID</th>
+        <th>Occupancy</th>
+        <th>Weight</th>
       </tr>
-      <tr>
-        <td>Alfreds Futterkiste</td>
-        <td>Maria Anders</td>
-        <td>Germany</td>
-      </tr>
-      <tr>
-        <td>Centro comerciala</td>
-        <td>Francisco Chang</td>
-        <td>Mexico</td>
+      <tr v-for="row in rows">
+        <td>{{ row.id }}</td>
+        <td>{{ row.occupancy }}</td>
+        <td>{{ row.weight }}</td>
       </tr>
     </table>
   </div>
 </template>
 
 <script setup lang="ts">
-import { TABLE_TITLE, NAV_TABLE_TITLE, NAV_TITLE, NAV_DASHBOARD_TITLE} from "@/constants/texts";
+import {NAV_DASHBOARD_TITLE, NAV_TABLE_TITLE, NAV_TITLE, TABLE_TITLE} from "@/constants/texts";
+import {onMounted, ref} from 'vue'
+import {get_sensor_data_from_api} from "@/controller/sensor_data";
+
+let rows = ref()
+let tmp
+
+onMounted(async () => {
+  tmp = await get_sensor_data_from_api()
+  rows.value = tmp
+  console.log(rows.value)
+})
+
+
 </script>
 
 
@@ -48,16 +57,19 @@ import { TABLE_TITLE, NAV_TABLE_TITLE, NAV_TITLE, NAV_DASHBOARD_TITLE} from "@/c
     border-spacing: 2px;
     border: 1px solid black;
   }
-  th, tr{
+
+  th, tr {
     border: 1px solid black;
   }
+
   td {
     padding: 6px;
     border: 1px solid black;
   }
-  .table-column{
-    border: 1px solid black;
-  }
+
+  /*.table-column{*/
+  /*  border: 1px solid black;*/
+  /*}*/
   .navbar {
     display: flex;
     align-items: center;

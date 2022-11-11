@@ -5,9 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import TodoList from './components/TodoList.vue';
-import Data_table from "@/components/data_table.vue";
-</script>
+import Data_table from "@/components/sensor_data.vue";</script>
 
 <style>
     * {
