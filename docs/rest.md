@@ -5,7 +5,6 @@
 #### /api/v1/data
 
 Endpoint response payload should follow schema described below:
-
 ```json
 [
   {
@@ -20,5 +19,12 @@ Endpoint response payload should follow schema described below:
   }
 ]
 ```
+
+Whole payload is a list of objects\
+Data types:
+
+- id: String
+- weight: Int
+- occupancy: Bool
 
 Please keep this in mind when creating API endpoint and request in GUI
