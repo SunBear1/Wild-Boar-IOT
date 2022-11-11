@@ -1,11 +1,22 @@
-using WebApi.Data;
 using WebApi.RabbitMQ;
 using WebApi.Services;
+using WebApi.Database;
+using WebApi.Model;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Do mongoDB
+builder.Services.Configure<WildBoarIotDatabaseSettings>(
+    builder.Configuration.GetSection("WildBoarIotDatabase"));
+
+builder.Services.AddSingleton<WildBoarIotDataService>();
+
+builder.Services.AddControllers()
+    .AddJsonOptions(
+        options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
+
 builder.Services.AddScoped<IWildBoarIotDataService, WildBoarIotDataService>();
-builder.Services.AddDbContext<DbContextClass>();
 builder.Services.AddScoped<IRabbitMQProducer, RabbitMQProducer>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

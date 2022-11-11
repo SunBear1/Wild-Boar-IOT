@@ -8,6 +8,7 @@ namespace WebApi.Model
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
+        public string id { get; set; }
         public int weights { get; set; }
         public bool occupancy { get; set; }
     }

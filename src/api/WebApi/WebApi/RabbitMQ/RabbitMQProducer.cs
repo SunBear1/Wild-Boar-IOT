@@ -20,11 +20,11 @@ namespace WebApi.RabbitMQ
             var connection = factory.CreateConnection();
 
             using var channel = connection.CreateModel();
-            channel.QueueDeclare("weights", exclusive: false);
+            channel.QueueDeclare("WildBoarQueue", exclusive: false);
 
             var json = JsonConvert.SerializeObject(message);
             var body = Encoding.UTF8.GetBytes(json);
-            channel.BasicPublish(exchange: "", routingKey: "weights", body: body);
+            channel.BasicPublish(exchange: "", routingKey: "id", body: body);
         }
     }
 }

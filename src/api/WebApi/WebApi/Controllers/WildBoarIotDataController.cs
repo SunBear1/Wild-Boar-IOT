@@ -19,37 +19,59 @@ namespace WebApi.Controllers
             rabbitMqProducer = _rabbitMqProducer;
         }
 
-        [HttpGet("wildBoarIotDataList")]
-        public IEnumerable<WildBoarIotData> WildBoarIotDataList()
+        [HttpGet()]
+        public async Task<List<WildBoarIotData>> Get() =>
+            await wildBoarIotDataService.GetAsync();
+
+        [HttpGet("{id:length(24)}")]
+        public async Task<ActionResult<WildBoarIotData>> Get(string id)
         {
-            var wildBoarIotDataList = wildBoarIotDataService.GetWildBoarIotDataList();
-            return wildBoarIotDataList;
+            var wildBoarData = await wildBoarIotDataService.GetAsync(id);
+
+            if (wildBoarData is null)
+            {
+                return NotFound();
+            }
+
+            return wildBoarData;
         }
 
-        [HttpGet("wildBoarIotDataById")]
-        public WildBoarIotData GetWildBoarIotDataById(int id)
+        [HttpPost]
+        public async Task<IActionResult> Post(WildBoarIotData wildBoarIotData)
         {
-            return wildBoarIotDataService.GetWildBoarIotDataById(id);
+            await wildBoarIotDataService.CreateAsync(wildBoarIotData);
+
+            return CreatedAtAction(nameof(Get), new { id = wildBoarIotData.id }, wildBoarIotData);
         }
 
-        [HttpPost("addWildBoarIotData")]
-        public WildBoarIotData AddWildBoarIotData(WildBoarIotData wildBoarIotData)
+        [HttpPut("{id:length(24)}")]
+        public async Task<IActionResult> Update(string id, WildBoarIotData wildBoarIotData)
         {
-            var wildBoarIotDataTemp = wildBoarIotDataService.AddWildBoarIotData(wildBoarIotData);
-            rabbitMqProducer.SendWildBoarIotDataMessage(wildBoarIotDataTemp);
-            return wildBoarIotDataTemp;
+            var data = await wildBoarIotDataService.GetAsync(id);
+
+            if (data is null)
+            {
+                return NotFound();
+            }
+
+            wildBoarIotData.id = data.id;
+            await wildBoarIotDataService.UpdateAsync(id, wildBoarIotData);
+            return NoContent();
         }
 
-        [HttpPut("updateWildBoarIotData")]
-        public WildBoarIotData UpdateWildBoarIotData(WildBoarIotData wildBoarIotData)
+        [HttpDelete("{id:length(24)}")]
+        public async Task<IActionResult> Delete(string id)
         {
-            return wildBoarIotDataService.UpdateWildBoarIotData(wildBoarIotData);
-        }
+            var data = await wildBoarIotDataService.GetAsync(id);
 
-        [HttpDelete("deleteWildBoarIotData")]
-        public bool DeleteWildBoarIotData(int id)
-        {
-            return wildBoarIotDataService.DeleteWildBoarIotData(id);
+            if (data is null)
+            {
+                return NotFound();
+            }
+
+            await wildBoarIotDataService.RemoveAsync(id);
+
+            return NoContent();
         }
     }
 }

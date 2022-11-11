@@ -1,48 +1,39 @@
-using WebApi.Data;
+using Microsoft.Extensions.Options;
 using WebApi.Model;
+using MongoDB.Driver;
+using WebApi.Database;
 
 namespace WebApi.Services
 {
     public class WildBoarIotDataService: IWildBoarIotDataService
     {
-        private readonly DbContextClass _dbContext;
+        private readonly IMongoCollection<WildBoarIotData> _dbContext;
 
-        public WildBoarIotDataService(DbContextClass dbContext)
+        public WildBoarIotDataService(IOptions<WildBoarIotDatabaseSettings> dbContext)
         {
-            _dbContext = dbContext;
+            var mongoClient = new MongoClient(
+                dbContext.Value.ConnectionString);
+
+            var mongoDatabase = mongoClient.GetDatabase(
+                dbContext.Value.DatabaseName);
+            
+            _dbContext = mongoDatabase.GetCollection<WildBoarIotData>(
+                dbContext.Value.CollectionName);
         }
 
-        public IEnumerable<WildBoarIotData> GetWildBoarIotDataList()
-        {
-            return _dbContext.Dataset.ToList();
-        }
+        public async Task<List<WildBoarIotData>> GetAsync() =>
+            await _dbContext.Find(_ => true).ToListAsync();
 
-        public WildBoarIotData GetWildBoarIotDataById(int id)
-        {
-            // TYMCZASOWO BO NIE MAM ID :)
-            return _dbContext.Dataset.Where(x => x.weights == id).FirstOrDefault();
-        }
+        public async Task<WildBoarIotData?> GetAsync(string id) =>
+            await _dbContext.Find(x => x.id == id).FirstOrDefaultAsync();
 
-        public WildBoarIotData AddWildBoarIotData(WildBoarIotData wildBoarIotData)
-        {
-            var result = _dbContext.Dataset.Add(wildBoarIotData);
-            _dbContext.SaveChanges();
-            return result.Entity;
-        }
+        public async Task CreateAsync(WildBoarIotData wildBoarIotData) =>
+            await _dbContext.InsertOneAsync(wildBoarIotData);
 
-        public WildBoarIotData UpdateWildBoarIotData(WildBoarIotData wildBoarIotData)
-        {
-            var result = _dbContext.Dataset.Update(wildBoarIotData);
-            _dbContext.SaveChanges();
-            return result.Entity;
-        }
+        public async Task UpdateAsync(string id, WildBoarIotData wildBoarIotData) =>
+            await _dbContext.ReplaceOneAsync(x => x.id == id, wildBoarIotData);
 
-        public bool DeleteWildBoarIotData(int id)
-        {
-            var filteredData = _dbContext.Dataset.Where(x => x.weights == id).FirstOrDefault();
-            var result = _dbContext.Remove(filteredData);
-            _dbContext.SaveChanges();
-            return result != null ? true : false;
-        }
+        public async Task RemoveAsync(string id) =>
+            await _dbContext.DeleteOneAsync(x => x.id == id);
     }
 }
