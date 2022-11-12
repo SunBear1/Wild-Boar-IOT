@@ -28,3 +28,8 @@ services:
     depends_on:
       message_broker:
         condition: service_healthy
+  api:
+    container_name: api
+    image: ${API_IMAGE_TAG}
+    ports:
+      - "7069:80"

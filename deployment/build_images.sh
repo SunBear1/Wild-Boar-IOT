@@ -13,3 +13,7 @@ echo "Finished building mongoDB image"
 echo "Building data_generator image..."
 cd ../src/data_generator; docker build -t $DATA_GENERATOR_IMAGE_TAG .; cd ..
 echo "Finished building data_generator image"
+
+echo "Building api image..."
+cd ../src/api/WebApi; docker build -t $API_IMAGE_TAG .; cd ..
+echo "Finished building api image"

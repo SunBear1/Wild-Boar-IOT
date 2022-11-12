@@ -17,11 +17,11 @@ class RabbitMQClient:
             pika.ConnectionParameters(host=HOST, port=PORT, credentials=cls.credentials, virtual_host=VHOST))
 
     @classmethod
-    def send_data_to_queue(cls, queue_name: str, payload):
+    def send_data_to_queue(cls, queue_name: str, payload, body):
         channel = cls.connection.channel()
         channel.queue_declare(queue=queue_name)
         channel.basic_publish(exchange='',
-                              routing_key=queue_name,
+                              routing_key=body,
                               body=payload)
 
     @classmethod

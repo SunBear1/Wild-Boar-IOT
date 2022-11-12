@@ -1,8 +1,9 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
-EXPOSE 5179
 EXPOSE 7069
-EXPOSE 20187
+EXPOSE 80
+EXPOSE 443
+
 
 ENV DOTNET_URLS=http://+:7069
 WORKDIR /app
