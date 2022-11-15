@@ -4,9 +4,11 @@ from datetime import datetime
 
 from faker import Faker
 
+from src.data_generator.rabbitmq_client import RabbitMQClient
+
 fake = Faker()
 
-# RabbitMQClient.create_connection()
+RabbitMQClient.create_connection()
 FREQUENCY = 7.5
 
 start_time = time.time()
@@ -23,6 +25,6 @@ while True:
         "date": fake.date_time_between(start_date='-45d', end_date='now').strftime("%d/%m/%Y, %H:%M:%S")
     }
     print(str(random_payload))
-    # RabbitMQClient.send_data_to_queue(queue_name="WildBoarQueue", payload=str(random_payload))
+    RabbitMQClient.send_data_to_queue(queue_name="WildBoarQueue", payload=str(random_payload))
     time.sleep(5.0 - ((time.time() - start_time) % 5.0))
     message_id += 1
