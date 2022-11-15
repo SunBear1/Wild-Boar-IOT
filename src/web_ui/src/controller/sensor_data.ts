@@ -4,7 +4,8 @@ import {API_URL} from "@/constants/endpoints";
 export type SensorType = {
     id: string
     weight: number,
-    occupancy: boolean
+    occupied: boolean
+    date: string
 };
 
 export async function get_sensor_data_from_api() {
@@ -15,7 +16,8 @@ export async function get_sensor_data_from_api() {
             const data: SensorType = {
                 id: response.data[i].id,
                 weight: response.data[i].weights,
-                occupancy: response.data[i].occupancy
+                occupied: response.data[i].occupancy,
+                date: response.data[i].date,
             };
             sensor_data.push(data)
         }
