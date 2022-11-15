@@ -10,5 +10,6 @@ namespace WebApi.Model
         public string id { get; set; }
         public int weights { get; set; }
         public bool occupancy { get; set; }
+        public DateTime date { get; set; }
     }
 }

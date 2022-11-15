@@ -2187,6 +2187,7 @@
       "MongoDB.Bson >= 2.18.0",
       "MongoDB.Driver >= 2.18.0",
       "Newtonsoft.Json >= 13.0.2-beta2",
+      "RabbitMQ.Client >= 6.4.0",
       "SQL >= 1.0.0.1",
       "Swashbuckle.AspNetCore >= 6.2.3"
     ]
@@ -2251,6 +2252,10 @@
           "Newtonsoft.Json": {
             "target": "Package",
             "version": "[13.0.2-beta2, )"
+          },
+          "RabbitMQ.Client": {
+            "target": "Package",
+            "version": "[6.4.0, )"
           },
           "SQL": {
             "target": "Package",

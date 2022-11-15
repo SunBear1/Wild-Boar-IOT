@@ -2,6 +2,6 @@ namespace WebApi.RabbitMQ
 {
     public interface IRabbitMQProducer
     {
-        public void SendWildBoarIotDataMessage < T > (T message);
+        // public void RabbitMQProducer();
     }
 }

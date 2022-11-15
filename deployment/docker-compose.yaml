@@ -22,7 +22,7 @@ services:
     image: malajski/wildboar-iot-gym:message-broker
     ports:
       - "17998:5672"
-      # - "17998:15672"
+      - "9090:15672"
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:15672" ]
       interval: 15s
