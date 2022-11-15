@@ -8,8 +8,8 @@ namespace WebApi.Model
     {
         [BsonId]
         public string id { get; set; }
-        public int weights { get; set; }
-        public bool occupancy { get; set; }
+        public int weight { get; set; }
+        public bool occupied { get; set; }
         public DateTime date { get; set; }
     }
 }
