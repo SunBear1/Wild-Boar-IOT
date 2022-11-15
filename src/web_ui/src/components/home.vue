@@ -1,11 +1,11 @@
-<template>
-  <p>home</p>
-</template>
+<!--<template>-->
+<!--  <p>home</p>-->
+<!--</template>-->
 
-<script>
+<!--<script>-->
 
-</script>
+<!--</script>-->
 
-<style setup lang="ts">
+<!--<style>-->
 
-</style>
+<!--</style>-->
