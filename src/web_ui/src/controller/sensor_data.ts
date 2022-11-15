@@ -14,7 +14,7 @@ export async function get_sensor_data_from_api() {
         for (let i = 0; i < response.data.length; i++) {
             const data: SensorType = {
                 id: response.data[i].id,
-                weight: response.data[i].weight,
+                weight: response.data[i].weights,
                 occupancy: response.data[i].occupancy
             };
             sensor_data.push(data)

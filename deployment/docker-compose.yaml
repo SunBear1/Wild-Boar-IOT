@@ -3,12 +3,14 @@ version: '2.4'
 services:
   web_ui:
     container_name: web_ui
-    image: wildboar-iot-gym/frontend
+    image: malajski/wildboar-iot-gym:frontend
     ports:
       - "80:80"
+    links:
+      - api
   message_broker:
     container_name: rabbitmq
-    image: wildboar-iot-gym/message-broker
+    image: malajski/wildboar-iot-gym:message-broker
     ports:
       - "15672:15672"
       - "5672:5672"
@@ -19,7 +21,7 @@ services:
       retries: 10
   database:
     container_name: mongodb
-    image: wildboar-iot-gym/database
+    image: malajski/wildboar-iot-gym:database
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
@@ -31,12 +33,12 @@ services:
       - .src/mongodb/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
   data_generator:
     container_name: data_generator
-    image: wildboar-iot-gym/data-generator
+    image: malajski/wildboar-iot-gym:data-generator
     depends_on:
       message_broker:
         condition: service_healthy
   api:
     container_name: api
-    image: wildboar-iot-gym/backend
+    image: malajski/wildboar-iot-gym:backend
     ports:
-      - "6000:80"
+      - "8080:80"
