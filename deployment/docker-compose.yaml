@@ -1,21 +1,30 @@
-version: '2.4'
+version: '3.8'
 
 services:
   web_ui:
     container_name: web_ui
     image: malajski/wildboar-iot-gym:frontend
     ports:
-      - "80:80"
-    links:
-      - api
+      - "17997:80"
+  data_generator:
+    container_name: data_generator
+    image: malajski/wildboar-iot-gym:data-generator
+    depends_on:
+      message_broker:
+        condition: service_healthy
+  api:
+    container_name: api
+    image: malajski/wildboar-iot-gym:backend
+    ports:
+      - "17999:80"
   message_broker:
     container_name: rabbitmq
     image: malajski/wildboar-iot-gym:message-broker
     ports:
-      - "15672:15672"
-      - "5672:5672"
+      - "17998:5672"
+      # - "17998:15672"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:15672"]
+      test: [ "CMD", "curl", "-f", "http://localhost:15672" ]
       interval: 15s
       timeout: 5s
       retries: 10
@@ -31,14 +40,3 @@ services:
       - "27017:27017"
     volumes:
       - .src/mongodb/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-  data_generator:
-    container_name: data_generator
-    image: malajski/wildboar-iot-gym:data-generator
-    depends_on:
-      message_broker:
-        condition: service_healthy
-  api:
-    container_name: api
-    image: malajski/wildboar-iot-gym:backend
-    ports:
-      - "8080:80"

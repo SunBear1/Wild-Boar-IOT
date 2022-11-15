@@ -1,1 +1,1 @@
-export const API_URL: string = "http://localhost:8080/api/WildBoarIotData";
+export const API_URL: string = "http://localhost:17999/api/WildBoarIotData";
