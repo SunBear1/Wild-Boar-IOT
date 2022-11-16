@@ -1,30 +1,42 @@
-version: '3.4'
+version: '3.8'
 
 services:
   web_ui:
     container_name: web_ui
-    image: ${WEB_UI_IMAGE_TAG}
+    image: malajski/wildboar-iot-gym:frontend
     ports:
-      - "80:80"
+      - "17997:80"
+  data_generator:
+    container_name: data_generator
+    image: malajski/wildboar-iot-gym:data-generator
+    depends_on:
+      message_broker:
+        condition: service_healthy
+  api:
+    container_name: api
+    image: malajski/wildboar-iot-gym:backend
+    ports:
+      - "17999:80"
   message_broker:
     container_name: rabbitmq
-    image: ${RABBITMQ_IMAGE_TAG}
+    image: malajski/wildboar-iot-gym:message-broker
     ports:
-      - "15672:15672"
-      - "5672:5672"
+      - "17998:5672"
+      - "9090:15672"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:15672"]
+      test: [ "CMD", "curl", "-f", "http://localhost:15672" ]
       interval: 15s
       timeout: 5s
       retries: 10
   database:
     container_name: mongodb
-    image: ${MONGODB_IMAGE_TAG}
+    image: malajski/wildboar-iot-gym:database
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+      MONGO_INITDB_DATABASE: WildBoarDB
     ports:
       - "27017:27017"
-  data_generator:
-    container_name: data_generator
-    image: ${DATA_GENERATOR_IMAGE_TAG}
-    depends_on:
-      message_broker:
-        condition: service_healthy
+    volumes:
+      - .src/mongodb/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro

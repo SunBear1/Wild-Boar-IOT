@@ -1,13 +1,32 @@
 import random
 import time
+from datetime import datetime
+
+from faker import Faker
 
 from rabbitmq_client import RabbitMQClient
 
+fake = Faker()
+
 RabbitMQClient.create_connection()
 FREQUENCY = 7.5
+MACHINES = ["CHEST_MACHINE", "BICEPS_MACHINE", "TREADMILL"]
 
 start_time = time.time()
+message_id = 1
+
+rand_date_begin = datetime.strptime('1/1/2021 1:00 AM', '%m/%d/%Y %I:%M %p')
+rand_date_end = datetime.strptime('1/1/2022 1:00 AM', '%m/%d/%Y %I:%M %p')
+
 while True:
-    RabbitMQClient.send_data_to_queue(queue_name="weights", payload=str(random.randrange(5, 130, 5)))
-    RabbitMQClient.send_data_to_queue(queue_name="occupancy", payload=str(random.choice([True, False])))
-    time.sleep(5.0 - ((time.time() - start_time) % 5.0))
+    random_payload = {
+        "id": message_id,
+        "type": random.choice(MACHINES),
+        "weight": random.randrange(5, 130, 5),
+        "occupied": str(random.choice([True, False])).lower(),
+        "date": fake.date_time_between(start_date='-45d', end_date='now').strftime("%m/%d/%Y, %H:%M:%S")
+    }
+    print(str(random_payload))
+    RabbitMQClient.send_data_to_queue(queue_name="WildBoarQueue", payload=str(random_payload))
+    time.sleep(FREQUENCY - ((time.time() - start_time) % FREQUENCY))
+    message_id += 1
