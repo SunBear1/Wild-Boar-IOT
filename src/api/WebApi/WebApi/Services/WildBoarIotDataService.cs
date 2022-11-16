@@ -24,16 +24,16 @@ namespace WebApi.Services
         public async Task<List<WildBoarIotData>> GetAsync() =>
             await _dbContext.Find(_ => true).ToListAsync();
 
-        public async Task<WildBoarIotData?> GetAsync(string id) =>
+        public async Task<WildBoarIotData?> GetAsync(long id) =>
             await _dbContext.Find(x => x.id == id).FirstOrDefaultAsync();
 
         public async Task CreateAsync(WildBoarIotData wildBoarIotData) =>
             await _dbContext.InsertOneAsync(wildBoarIotData);
 
-        public async Task UpdateAsync(string id, WildBoarIotData wildBoarIotData) =>
+        public async Task UpdateAsync(long id, WildBoarIotData wildBoarIotData) =>
             await _dbContext.ReplaceOneAsync(x => x.id == id, wildBoarIotData);
 
-        public async Task RemoveAsync(string id) =>
+        public async Task RemoveAsync(long id) =>
             await _dbContext.DeleteOneAsync(x => x.id == id);
     }
 }

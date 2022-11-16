@@ -20,7 +20,7 @@ namespace WebApi.Controllers
             await wildBoarIotDataService.GetAsync();
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<WildBoarIotData>> Get(string id)
+        public async Task<ActionResult<WildBoarIotData>> Get(long id)
         {
             var wildBoarData = await wildBoarIotDataService.GetAsync(id);
 
@@ -36,12 +36,12 @@ namespace WebApi.Controllers
         public async Task<IActionResult> Post(WildBoarIotData wildBoarIotData)
         {
             await wildBoarIotDataService.CreateAsync(wildBoarIotData);
-
+            
             return CreatedAtAction(nameof(Get), new { id = wildBoarIotData.id }, wildBoarIotData);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(string id, WildBoarIotData wildBoarIotData)
+        public async Task<IActionResult> Update(long id, WildBoarIotData wildBoarIotData)
         {
             var data = await wildBoarIotDataService.GetAsync(id);
 
@@ -56,7 +56,7 @@ namespace WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(long id)
         {
             var data = await wildBoarIotDataService.GetAsync(id);
 

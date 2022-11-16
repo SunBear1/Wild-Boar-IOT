@@ -10,6 +10,7 @@ fake = Faker()
 
 RabbitMQClient.create_connection()
 FREQUENCY = 7.5
+MACHINES = ["CHEST_MACHINE", "BICEPS_MACHINE", "TREADMILL"]
 
 start_time = time.time()
 message_id = 1
@@ -20,9 +21,10 @@ rand_date_end = datetime.strptime('1/1/2022 1:00 AM', '%m/%d/%Y %I:%M %p')
 while True:
     random_payload = {
         "id": message_id,
+        "type": random.choice(MACHINES),
         "weight": random.randrange(5, 130, 5),
         "occupied": str(random.choice([True, False])).lower(),
-        "date": fake.date_time_between(start_date='-45d', end_date='now').strftime("%d/%m/%Y, %H:%M:%S")
+        "date": fake.date_time_between(start_date='-45d', end_date='now').strftime("%m/%d/%Y, %H:%M:%S")
     }
     print(str(random_payload))
     RabbitMQClient.send_data_to_queue(queue_name="WildBoarQueue", payload=str(random_payload))

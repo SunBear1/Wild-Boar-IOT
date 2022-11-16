@@ -7,7 +7,8 @@ namespace WebApi.Model
     public class WildBoarIotData
     {
         [BsonId]
-        public string id { get; set; }
+        public long id { get; set; }
+        public string type { get; set; }
         public int weight { get; set; }
         public bool occupied { get; set; }
         public DateTime date { get; set; }

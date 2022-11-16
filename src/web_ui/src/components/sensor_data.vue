@@ -18,14 +18,16 @@
       <table class="table-root">
         <tr>
           <th>ID</th>
+          <th>Type</th>
           <th>Date</th>
           <th>Occupancy</th>
           <th>Weight</th>
         </tr>
         <tr v-for="row in rows">
           <td>{{ row.id }}</td>
-          <td>2022-12-24</td>
-          <td>{{ row.occupancy }}</td>
+          <td>{{ row.type }}</td>
+          <td>{{ row.date }}</td>
+          <td>{{ row.occupied }}</td>
           <td>{{ row.weight }}</td>
         </tr>
       </table>
@@ -43,7 +45,6 @@
       </div>
     </div>
   </div>
-
 
 </template>
 
@@ -66,6 +67,7 @@ let tmp
 onMounted(async () => {
   tmp = await get_sensor_data_from_api()
   rows.value = tmp
+  console.log("rows")
   console.log(rows.value)
 })
 

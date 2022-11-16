@@ -2,7 +2,8 @@ import axios from "axios";
 import {API_URL} from "@/constants/endpoints";
 
 export type SensorType = {
-    id: string
+    id: number,
+    type: string
     weight: number,
     occupied: boolean
     date: string
@@ -15,8 +16,9 @@ export async function get_sensor_data_from_api() {
         for (let i = 0; i < response.data.length; i++) {
             const data: SensorType = {
                 id: response.data[i].id,
-                weight: response.data[i].weights,
-                occupied: response.data[i].occupancy,
+                type: response.data[i].type,
+                weight: response.data[i].weight,
+                occupied: response.data[i].occupied,
                 date: response.data[i].date,
             };
             sensor_data.push(data)
