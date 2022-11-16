@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Model;
-using WebApi.RabbitMQ;
 using WebApi.Services;
 
 namespace WebApi.Controllers
@@ -10,13 +9,10 @@ namespace WebApi.Controllers
     public class WildBoarIotDataController : ControllerBase
     {
         private readonly IWildBoarIotDataService wildBoarIotDataService;
-        private readonly IRabbitMQProducer rabbitMqProducer;
 
-        public WildBoarIotDataController(IWildBoarIotDataService _wildBoarIotDataService,
-            IRabbitMQProducer _rabbitMqProducer)
+        public WildBoarIotDataController(IWildBoarIotDataService _wildBoarIotDataService)
         {
             wildBoarIotDataService = _wildBoarIotDataService;
-            rabbitMqProducer = _rabbitMqProducer;
         }
 
         [HttpGet()]

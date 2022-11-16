@@ -30,13 +30,14 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddScoped<IWildBoarIotDataService, WildBoarIotDataService>();
-builder.Services.AddScoped<IRabbitMQProducer, RabbitMQProducer>();
+//builder.Services.AddHostedService<RabbitMQService>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddHostedService<RabbitMQConsumer>();
 
+//builder.Services.AddScoped<RabbitMQConsumer>();
+builder.Services.AddHostedService<RabbitMQConsumer>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
