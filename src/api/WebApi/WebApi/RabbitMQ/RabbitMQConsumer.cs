@@ -1,6 +1,5 @@
 using System.Text;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using WebApi.Model;
@@ -29,9 +28,9 @@ public class RabbitMQConsumer : BackgroundService
             HostName = "localhost",
             Port = 17998
         };
+
         connection = factory.CreateConnection();
         channel = connection.CreateModel();
-
     }
     protected override Task ExecuteAsync(CancellationToken stoppingToken)  
     {  
@@ -66,7 +65,8 @@ public class RabbitMQConsumer : BackgroundService
 
     private void StoreMessage(WildBoarIotData wbiData)  
     {
-        // TODO Insert this object into mongoDB
+        var restApiCall = new RestApiCall.RestApiCall("http://api:17999/api/WildBoarIotData");
+        restApiCall.postData(wbiData);
     }  
     public override void Dispose()  
     {  
