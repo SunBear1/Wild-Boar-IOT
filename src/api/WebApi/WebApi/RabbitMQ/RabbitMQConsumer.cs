@@ -1,5 +1,6 @@
 using System.Text;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using WebApi.Model;
@@ -39,13 +40,10 @@ public class RabbitMQConsumer : BackgroundService
         {
             var body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
-            _logger.LogInformation($"consumer received {message}");
-            // Console.WriteLine(message);
-            //var data = JsonConvert.DeserializeObject<WildBoarIotData>(message);
-            var DataPayload = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(message);
-            Console.WriteLine(DataPayload.ToString());
-           // _logger.LogInformation(DataPayload.ToString());
-            //Console.WriteLine(data);
+            _logger.LogInformation($"API received following message: {message}");
+            var wbiData = ConvertMessageToWBIData(message);
+            StoreMessage(wbiData);
+            ConvertMessageToWBIData(message);
         };
         channel.BasicConsume(queue: "WildBoarQueue",
             autoAck: true,
@@ -53,13 +51,23 @@ public class RabbitMQConsumer : BackgroundService
         return Task.CompletedTask;  
     }  
   
-    private void HandleMessage(string content)  
-    {  
-        // we just print this message   
-        Console.WriteLine(content);
-        _logger.LogInformation($"consumer received {content}");
+    private WildBoarIotData ConvertMessageToWBIData(string message)  
+    {
+        var messageData = JsonConvert.DeserializeObject<dynamic>(message);
+        var messageWBIData = new WildBoarIotData
+        {
+            id = messageData.id,
+            occupied = messageData.occupied,
+            weight = messageData.weight,
+            date = messageData.date
+        };
+        return messageWBIData;
     }  
 
+    private void StoreMessage(WildBoarIotData wbiData)  
+    {
+        // TODO Insert this object into mongoDB
+    }  
     public override void Dispose()  
     {  
         channel.Close();  
