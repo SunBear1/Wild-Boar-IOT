@@ -1,2 +1,5 @@
 /.idea/
 .DS_STORE
+/src/api/WebApi/.idea/
+/src/api/WebApi/WebApi/bin/
+/src/api/WebApi/WebApi/obj/
