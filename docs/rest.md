@@ -53,5 +53,5 @@ Data types:
 Parameters can be combined. Couple of examples:
 
 - /api/WildBoarIotData?weight=100&sort=type
-- /api/WildBoarIotData?weight=50&date_start=01-01-2022&date_end=07-07-2022
+- /api/WildBoarIotData?weight=50&date_start=01-01-2022&date_end=07-07-2022 (format of date TBD)
 - /api/WildBoarIotData?sort=date&format=csv&occupied=false
