@@ -47,3 +47,11 @@ Data types:
 
 - /api/WildBoarIotData?format=json - default doesn't have to be provided
 - /api/WildBoarIotData?format=csv - alternative mode of formatting the request payload
+
+### Examples
+
+Parameters can be combined. Couple of examples:
+
+- /api/WildBoarIotData?weight=100&sort=type
+- /api/WildBoarIotData?weight=50&date_start=01-01-2022&date_end=07-07-2022
+- /api/WildBoarIotData?sort=date&format=csv&occupied=false
