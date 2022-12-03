@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.7'
 
 services:
   web_ui:
@@ -9,12 +9,14 @@ services:
   data_generator:
     container_name: data_generator
     image: malajski/wildboar-iot-gym:data-generator
+    restart: always
     depends_on:
-      message_broker:
-        condition: service_healthy
+      - message_broker
+  #        condition: service_healthy
   api:
     container_name: api
     image: malajski/wildboar-iot-gym:backend
+    restart: always
     ports:
       - "17999:80"
   message_broker:
@@ -38,5 +40,5 @@ services:
       MONGO_INITDB_DATABASE: WildBoarDB
     ports:
       - "27017:27017"
-    volumes:
-      - .src/mongodb/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+#    volumes:
+#      - .src/mongodb/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro

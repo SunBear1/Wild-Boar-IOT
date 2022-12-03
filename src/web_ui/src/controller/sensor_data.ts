@@ -10,6 +10,7 @@ export type SensorType = {
 };
 
 export async function get_sensor_data_from_api() {
+    console.log("siema")
     try {
         const response = await axios.get(API_URL);
         let sensor_data: SensorType[] = []

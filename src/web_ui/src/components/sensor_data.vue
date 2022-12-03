@@ -15,22 +15,49 @@
 
     <div id="data" class="data-section">
       <p class="main-title">{{ TABLE_TITLE }}</p>
-      <table class="table-root">
-        <tr>
-          <th>ID</th>
-          <th>Type</th>
-          <th>Date</th>
-          <th>Occupancy</th>
-          <th>Weight</th>
-        </tr>
-        <tr v-for="row in rows">
-          <td>{{ row.id }}</td>
-          <td>{{ row.type }}</td>
-          <td>{{ row.date }}</td>
-          <td>{{ row.occupied }}</td>
-          <td>{{ row.weight }}</td>
-        </tr>
-      </table>
+      <div class="filter-wrapper">
+        <div class="sort-div">
+          <p>Sort by:</p>
+          <select name="cars" id="cars">
+            <option value="volvo">ID</option>
+            <option value="volvo">Type</option>
+            <option value="saab">Date</option>
+            <option value="opel">Occupancy</option>
+            <option value="audi">Weight</option>
+          </select>
+        </div>
+        <div class="filter-div">
+          <p>Filter:</p>
+          <select name="cars" id="cars">
+            <option value="volvo">ID</option>
+            <option value="volvo">Type</option>
+            <option value="saab">Date</option>
+            <option value="opel">Occupancy</option>
+            <option value="audi">Weight</option>
+          </select>
+        </div>
+      </div>
+      <div class="scroll">
+        <table class="table-root">
+          <tr>
+            <th>ID</th>
+            <th>Type</th>
+            <th>Date</th>
+            <th>Occupancy</th>
+            <th>Weight</th>
+          </tr>
+          <tr v-for="row in rows">
+            <td>{{ row.id }}</td>
+            <td>{{ row.type }}</td>
+            <td>{{ row.date }}</td>
+            <td>{{ row.occupied }}</td>
+            <td>{{ row.weight }}</td>
+          </tr>
+        </table>
+        <div v-if="isloading">
+          <p>LOADING...</p>
+        </div>
+      </div>
     </div>
 
     <div id="charts" class="charts-section">
@@ -50,8 +77,17 @@
 
 <script setup lang="ts">
 import {NAV_CHARTS_TITLE, NAV_DASHBOARD_TITLE, NAV_TABLE_TITLE, NAV_TITLE, TABLE_TITLE} from "@/constants/texts";
-import {onMounted, ref} from 'vue'
+import {onMounted, ref, watch} from 'vue'
 import {get_sensor_data_from_api} from "@/controller/sensor_data";
+import {useInterval} from "@vueuse/core";
+
+const {counter, pause, resume} = useInterval(1000, {controls: true})
+watch(counter, async () => {
+  pause()
+  rows.value = await get_sensor_data_from_api()
+  resume()
+})
+
 
 function scrollToElement(id: string) {
   const element = document.getElementById(id);
@@ -62,13 +98,9 @@ function scrollToElement(id: string) {
 }
 
 let rows = ref()
-let tmp
 
 onMounted(async () => {
-  tmp = await get_sensor_data_from_api()
-  rows.value = tmp
-  console.log("rows")
-  console.log(rows.value)
+  rows.value = await get_sensor_data_from_api()
 })
 
 </script>
@@ -78,18 +110,17 @@ onMounted(async () => {
 
 .overlay {
   background-color: #242528;
-  position: fixed;
-  z-index: 1;
+  /*position: fixed;*/
+  /*z-index: 1;*/
   width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  overflow-y: scroll;
+  /*height: 100%;*/
+  /*top: 0;*/
+  /*left: 0;*/
+  /*overflow-y: auto;*/
 }
 
 .main-title {
   margin-top: 10px;
-  align-content: center;
   text-align: center;
   font-size: 1.5rem;
   color: white;
@@ -127,22 +158,52 @@ onMounted(async () => {
   text-align: center;
 }
 
-/*Data section styles*/
-
-.data-section {
-  height: 800px;
+.filter-wrapper {
+  margin-top: 40px;
+  width: 750px;
+  display: flex;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
 }
 
+.sort-div {
+  margin-left: auto;
+  margin-right: auto;
+  float: left;
+  width: 100%;
+}
+
+.filter-div {
+  margin-left: auto;
+  margin-right: auto;
+  float: right;
+  width: 100%;
+}
+
+.data-section {
+  height: 600px;
+}
+
+.scroll {
+  margin-top: 40px;
+  overflow-y: scroll;
+  width: 750px;
+  display: flex;
+  justify-content: center;
+  height: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 .table-root {
-  margin-top: 35px;
   margin-left: auto;
   margin-right: auto;
   border-collapse: collapse;
-  border-spacing: 5px;
   background-color: #2E2F32;
-  width: 30%;
+  width: 750px;
   text-align: left;
+  height: 400px;
 }
 
 th, td {
@@ -156,6 +217,11 @@ th {
   background-color: #00C7FD;
   font-weight: bold;
   color: #242528;
+  height: 2em;
+}
+
+td {
+  height: 2em;
 }
 
 thead th {
