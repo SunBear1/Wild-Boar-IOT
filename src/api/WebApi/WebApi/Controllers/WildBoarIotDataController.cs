@@ -1,6 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Model;
 using WebApi.Services;
+using Microsoft.EntityFrameworkCore;
+using RabbitMQ.Client;
+using WebApi;
+
 
 namespace WebApi.Controllers
 {
@@ -15,9 +19,39 @@ namespace WebApi.Controllers
             wildBoarIotDataService = _wildBoarIotDataService;
         }
 
-        [HttpGet()]
-        public async Task<List<WildBoarIotData>> Get() =>
-            await wildBoarIotDataService.GetAsync();
+        [HttpGet("{sort?}/{format?}/{type?}/{weight?}/{occupied?}/{date_start?}/{date_end?}")]
+        public async Task<List<WildBoarIotData>> Get(string? sort, string? format, string? type, int weight,
+            bool occupied, DateTime? date_start, DateTime? date_end)
+        {
+            var getData = await wildBoarIotDataService.GetAsync();
+            
+            if (sort != null)
+            {
+                getData = getData.OrderBy(x => "x." + sort).ToList();
+            }
+            if (type != null)
+            {
+                getData = getData.FindAll(x => x.type == type);
+            } 
+            if (weight != null) {
+                getData = getData.FindAll(x => x.weight == weight);
+            } 
+            if (occupied != null) {
+                getData = getData.FindAll(x => x.occupied == occupied);
+            } 
+            if (date_start != null) {
+                getData = getData.FindAll(x => x.date >= date_start);
+            } 
+            if (date_end != null) {
+                getData = getData.FindAll(x => x.date <= date_end);
+            }
+            if (format == "csv")
+            {
+                // I have no clue. Docker police pls help!
+            }
+            
+            return getData;
+        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<WildBoarIotData>> Get(long id)
