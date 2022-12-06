@@ -1,10 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Model;
 using WebApi.Services;
-using Microsoft.EntityFrameworkCore;
-using RabbitMQ.Client;
-using WebApi;
-
 
 namespace WebApi.Controllers
 {
@@ -19,17 +15,20 @@ namespace WebApi.Controllers
             wildBoarIotDataService = _wildBoarIotDataService;
         }
 
-        [HttpGet("{sort?}/{format?}/{type?}/{weight?}/{occupied?}/{date_start?}/{date_end?}")]
-        public async Task<List<WildBoarIotData>> Get(string? sort, string? format, string? type, int weight,
-            bool occupied, DateTime? date_start, DateTime? date_end)
+        [HttpGet]
+        [Route("{sort?}/{format?}/{type?}/{weight?}/{occupied?}/{date_start?}/{date_end?}")]
+        public async Task<List<WildBoarIotData>> Get( DateTime? date_start, DateTime? date_end, string sort=" ", string format=" ", string type=" ", int weight=0,
+            bool occupied=false)
         {
             var getData = await wildBoarIotDataService.GetAsync();
-            
-            if (sort != null)
+
+            if (sort != " ")
             {
+                Console.Write(getData);
+                Console.Write("here");
                 getData = getData.OrderBy(x => "x." + sort).ToList();
             }
-            if (type != null)
+            if (type != " ")
             {
                 getData = getData.FindAll(x => x.type == type);
             } 
