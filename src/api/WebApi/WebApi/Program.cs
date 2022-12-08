@@ -1,3 +1,4 @@
+using UserService;
 using WebApi.RabbitMQ;
 using WebApi.Services;
 using WebApi.Database;
@@ -14,9 +15,7 @@ builder.Services.Configure<WildBoarIotDatabaseSettings>(
 
 builder.Services.AddSingleton<WildBoarIotDataService>();
 
-builder.Services.AddControllers()
-    .AddJsonOptions(
-        options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
+builder.Services.AddMvc(options => options.OutputFormatters.Add(new CustomCsvFormatter()));
 
 builder.Services.AddCors(options =>
 {
