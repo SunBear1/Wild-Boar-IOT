@@ -13,7 +13,7 @@ export function parse_parameters(url_parameters_list: string[]): string {
     return url_string;
 }
 
-export function collect_parameters(sort: string, type: string, occupancy: string, weight: string, date_start?: string, date_end?: string,): string[] {
+export function collect_parameters(sort: string, type: string, occupancy: string, weight: string, order: string, date_start?: string, date_end?: string,): string[] {
     let parameters: string[] = []
     parameters.push("sort=" + sort)
     if (type !== "all") {
@@ -30,6 +30,9 @@ export function collect_parameters(sort: string, type: string, occupancy: string
     }
     if (weight !== "") {
         parameters.push("weight=" + weight)
+    }
+    if (order !== "") {
+        parameters.push("order=" + order)
     }
     return parameters;
 }

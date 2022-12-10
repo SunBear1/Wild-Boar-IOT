@@ -11,7 +11,7 @@
 
     <div id="dashboard" class="dashboard-section">
       <p class="main-title">Dashboard</p>
-      <p class="dashboard-small-title">Last received message: <span>PLACEHOLDER</span></p>
+      <p class="dashboard-small-title">Last received message: <span>{{ }}</span></p>
       <br>
       <p class="dashboard-small-title">Avarage values per 100 messages for each type:</p>
       <br>
@@ -40,8 +40,8 @@
           <br>
           <p class="filter-title">Sorting order</p>
           <select name="sorting-order-form" v-model="sorting_order_input">
-            <option value="ascend">Ascending</option>
-            <option value="descend">Descending</option>
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
           </select>
         </div>
         <div class="filter-div">
@@ -105,6 +105,7 @@
 
     <div id="charts" class="charts-section">
       <p class="main-title">Charts</p>
+      <charts chartData="charts_obj"/>
     </div>
 
     <div class="footer">
@@ -124,7 +125,7 @@ import {onMounted, ref, watch} from 'vue'
 import {get_sensor_data_from_api} from "@/controller/sensor_data";
 import {useInterval} from "@vueuse/core";
 import {collect_parameters, parse_parameters} from "@/controller/parameters";
-
+import Charts from "@/components/charts.vue";
 
 let rows = ref()
 let sort_input = ref("id")
@@ -134,12 +135,13 @@ let date_end_input = ref(undefined)
 let occupancy_input = ref("all")
 let weight_input = ref("")
 let format_input = ref("application/json")
-let sorting_order_input = ref("ascend")
+let sorting_order_input = ref("asc")
+
 
 const {counter, pause, resume} = useInterval(1000, {controls: true})
 watch(counter, async () => {
   pause()
-  let url_parameters: string[] = collect_parameters(sort_input.value, type_input.value, occupancy_input.value, weight_input.value, date_start_input.value, date_end_input.value)
+  let url_parameters: string[] = collect_parameters(sort_input.value, type_input.value, occupancy_input.value, weight_input.value, sorting_order_input.value, date_start_input.value, date_end_input.value)
   rows.value = await get_sensor_data_from_api(format_input.value, parse_parameters(url_parameters))
   resume()
 })
@@ -152,14 +154,22 @@ function scrollToElement(id: string) {
   });
 }
 
-
+let chart_obj = {
+  labels: ['January', 'February', 'March'],
+  datasets: [
+    {
+      label: 'Data One',
+      backgroundColor: '#f87979',
+      data: [40, 20, 12]
+    }
+  ]
+}
 
 onMounted(async () => {
   rows.value = await get_sensor_data_from_api(format_input.value, parse_parameters([]))
 })
 
 </script>
-
 
 <style scoped>
 
@@ -272,7 +282,7 @@ input {
   width: 750px;
   display: flex;
   justify-content: center;
-  height: 400px;
+  max-height: 400px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -284,7 +294,7 @@ input {
   background-color: #2E2F32;
   width: 750px;
   text-align: left;
-  height: 400px;
+  max-height: 400px;
 }
 
 th {
@@ -294,6 +304,7 @@ th {
   font-family: Tahoma, Helvetica, Arial, sans-serif;
   padding: 8px;
   font-size: 14px;
+  height: 2em;
 }
 
 td {
@@ -311,13 +322,15 @@ thead th {
 /*Charts section*/
 
 .charts-section {
-  height: 500px;
+  height: 800px;
 }
 
 /*Dashboard section*/
 
 .dashboard-section {
   height: 300px;
+  align-items: center;
+  justify-content: center;
 }
 
 /*Nav Bar styles*/

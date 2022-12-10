@@ -1,6 +1,7 @@
 <template>
     <div>
         <data_table />
+        <charts/>
     </div>
 </template>
 

@@ -1,5 +1,5 @@
 import axios from "axios";
-import {API_URL} from "@/constants/endpoints";
+import {SENSOR_DATA_API_URL} from "@/constants/endpoints";
 
 export type SensorType = {
     id: number,
@@ -10,7 +10,7 @@ export type SensorType = {
 };
 
 export async function get_sensor_data_from_api(data_format: string, url_parameters?: string) {
-    let URL = API_URL
+    let URL = SENSOR_DATA_API_URL
     if (typeof url_parameters !== 'undefined') {
         URL = URL + url_parameters
     }
