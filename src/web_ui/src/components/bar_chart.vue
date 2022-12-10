@@ -19,7 +19,7 @@ export default {
     myStyles() {
       return {
         height: '400px',
-        width: '700px',
+        width: '750px',
       }
     }
   },
@@ -32,7 +32,7 @@ export default {
       type: Object,
       default: () => {
       }
-    }
+    },
   },
 }
 </script>

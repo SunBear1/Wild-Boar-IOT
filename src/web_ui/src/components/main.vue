@@ -3,13 +3,13 @@
     <nav id="navbar" class="navbar">
       <p class="nav-title"> {{ NAV_TITLE }}</p>
       <div class="nav-items">
-        <a @click="scrollToElement('charts')" class="nav-button">{{ NAV_CHARTS_TITLE }}</a>
-        <a @click="scrollToElement('data')" class="nav-button">{{ NAV_TABLE_TITLE }}</a>
-        <a @click="scrollToElement('dashboard')" class="nav-button">{{ NAV_DASHBOARD_TITLE }}</a>
+        <a class="nav-button" @click="scrollToElement('charts')">{{ NAV_CHARTS_TITLE }}</a>
+        <a class="nav-button" @click="scrollToElement('data')">{{ NAV_TABLE_TITLE }}</a>
+        <a class="nav-button" @click="scrollToElement('dashboard')">{{ NAV_DASHBOARD_TITLE }}</a>
       </div>
     </nav>
 
-    <div id="dashboard" class="dashboard-section" v-if="dashboard_data">
+    <div v-if="dashboard_data" id="dashboard" class="dashboard-section">
       <p class="main-title">Dashboard</p>
       <p class="dashboard-small-title">Last received message:</p>
       <div class="dashboard-wrapper">
@@ -41,7 +41,7 @@
       <div class="filter-wrapper">
         <div class="sort-div">
           <p class="filter-title">Sort by</p>
-          <select name="sorting-form" id="sort" v-model="sort_input">
+          <select id="sort" v-model="sort_input" name="sorting-form">
             <option value="id">ID</option>
             <option value="type">Type</option>
             <option value="date">Date</option>
@@ -51,14 +51,14 @@
           <br>
           <br>
           <p class="filter-title">Sorting order</p>
-          <select name="sorting-order-form" v-model="sorting_order_input">
+          <select v-model="sorting_order_input" name="sorting-order-form">
             <option value="asc">Ascending</option>
             <option value="desc">Descending</option>
           </select>
         </div>
         <div class="filter-div">
           <p class="filter-title">Type</p>
-          <select name="filtering-form" id="filter" v-model="type_input">
+          <select id="filter" v-model="type_input" name="filtering-form">
             <option value="all">All</option>
             <option value="CHEST_MACHINE">Chest machine</option>
             <option value="BICEPS_MACHINE">Biceps machine</option>
@@ -67,24 +67,24 @@
           <br>
           <br>
           <p class="filter-title">Data format</p>
-          <select name="format-filter-form" v-model="format_input">
+          <select v-model="format_input" name="format-filter-form">
             <option value="application/json">JSON</option>
             <option value="text/csv">CSV</option>
           </select>
         </div>
         <div class="filter-div">
           <p class="filter-title">From</p>
-          <input type="date" name="date-start-filter-form"
-                 min="01-01-2021" max="12-31-2021" v-model="date_start_input">
+          <input v-model="date_start_input" max="12-31-2021"
+                 min="01-01-2021" name="date-start-filter-form" type="date">
           <br>
           <br>
           <p class="filter-title">To the</p>
-          <input type="date" name="date-end-filter-form"
-                 min="01-02-2021" max="01-01-2022" v-model="date_end_input">
+          <input v-model="date_end_input" max="01-01-2022"
+                 min="01-02-2021" name="date-end-filter-form" type="date">
         </div>
         <div class="filter-div">
           <p class="filter-title">Occupancy</p>
-          <select name="occupancy-filter-form" v-model="occupancy_input">
+          <select v-model="occupancy_input" name="occupancy-filter-form">
             <option value="all">All</option>
             <option value="true">True</option>
             <option value="false">False</option>
@@ -92,7 +92,7 @@
           <br>
           <br>
           <p class="filter-title">Weight</p>
-          <input name="weight-filter-form" type="number" min="0" step="1" v-model="weight_input">
+          <input v-model="weight_input" min="0" name="weight-filter-form" step="1" type="number">
         </div>
       </div>
       <div class="scroll">
@@ -117,7 +117,9 @@
 
     <div id="charts" class="charts-section">
       <p class="main-title">Charts</p>
-      <BarChart :chartData="chart_data"/>
+      <BarChart :chartData="bar_chart_data"/>
+      <br>
+      <Doughnut_chart :chartData="doughnut_chart_data"/>
     </div>
 
     <div class="footer">
@@ -131,15 +133,16 @@
 
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import {NAV_CHARTS_TITLE, NAV_DASHBOARD_TITLE, NAV_TABLE_TITLE, NAV_TITLE, TABLE_TITLE} from "@/constants/texts";
 import {onMounted, ref, watch} from 'vue'
 import {get_sensor_data_from_api} from "@/controller/sensor_data";
 import {get_dashboard_data_from_api} from "@/controller/dashboard";
-import {convertToChartData} from "@/controller/charts";
+import {prepareBarChartData, prepareDoughNutChartData} from "@/controller/charts";
 import {useInterval} from "@vueuse/core";
 import {collect_parameters, parse_parameters} from "@/controller/parameters";
-import BarChart from "@/components/charts.vue";
+import BarChart from "@/components/bar_chart.vue";
+import Doughnut_chart from "@/components/doughnut_chart.vue";
 
 let rows = ref()
 let sort_input = ref("id")
@@ -151,21 +154,28 @@ let weight_input = ref("")
 let format_input = ref("application/json")
 let sorting_order_input = ref("asc")
 let dashboard_data = ref()
-let chart_data = ref({
+let bar_chart_data = ref({
   labels: [],
   datasets: []
 })
+let doughnut_chart_data = ref({
+  labels: ['VueJs', 'EmberJs', 'ReactJs', 'AngularJs'],
+  datasets: [
+    {
+      backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
+      data: [40, 20, 80, 10]
+    }
+  ]
+})
 
-let num = 1
 const {counter, pause, resume} = useInterval(1000, {controls: true})
 watch(counter, async () => {
-
   pause()
   let url_parameters: string[] = collect_parameters(sort_input.value, type_input.value, occupancy_input.value, weight_input.value, sorting_order_input.value, date_start_input.value, date_end_input.value)
   dashboard_data.value = await get_dashboard_data_from_api()
   rows.value = await get_sensor_data_from_api(format_input.value, parse_parameters(url_parameters))
-  chart_data.value = convertToChartData(num)
-  num = num + 1
+  bar_chart_data.value = prepareBarChartData(rows.value)
+  doughnut_chart_data.value = prepareDoughNutChartData(rows.value)
   resume()
 })
 
@@ -179,7 +189,7 @@ function scrollToElement(id: string) {
 
 onMounted(async () => {
   rows.value = await get_sensor_data_from_api(format_input.value, parse_parameters([]))
-  chart_data.value = {labels: [], datasets: []}
+  bar_chart_data.value = {labels: [], datasets: []}
 })
 
 </script>
@@ -357,7 +367,7 @@ thead th {
 /*Charts section*/
 
 .charts-section {
-  height: 800px;
+  height: 1200px;
 }
 
 /*Dashboard section*/
