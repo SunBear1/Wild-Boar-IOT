@@ -1,3 +1,4 @@
+using ChoETL;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Model;
 using WebApi.Services;
@@ -16,39 +17,32 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("{sort?}/{format?}/{type?}/{weight?}/{occupied?}/{date_start?}/{date_end?}")]
-        public async Task<List<WildBoarIotData>> Get( DateTime? date_start, DateTime? date_end, string sort=" ", string format=" ", string type=" ", int weight=0,
-            bool occupied=false)
+        public async Task<List<WildBoarIotData>> Get(string? sort=null, string? type=null, int? weight=null,
+            bool? occupied=null, DateTime? date_start=null, DateTime? date_end=null )
         {
             var getData = await wildBoarIotDataService.GetAsync();
-
-            if (sort != " ")
+            
+            if (!sort.IsNull())
             {
-                Console.Write(getData);
-                Console.Write("here");
-                getData = getData.OrderBy(x => "x." + sort).ToList();
+                getData = getData.OrderBy(x => x.GetType().GetProperty(sort).GetValue(x, null)).ToList();
             }
-            if (type != " ")
+
+            if (!type.IsNull())
             {
                 getData = getData.FindAll(x => x.type == type);
-            } 
-            if (weight != null) {
+            }
+            if (!weight.IsNull()) {
                 getData = getData.FindAll(x => x.weight == weight);
             } 
-            if (occupied != null) {
+            if (!occupied.IsNull()) {
                 getData = getData.FindAll(x => x.occupied == occupied);
             } 
-            if (date_start != null) {
+            if (!date_start.IsNull()) {
                 getData = getData.FindAll(x => x.date >= date_start);
             } 
-            if (date_end != null) {
+            if (!date_end.IsNull()) {
                 getData = getData.FindAll(x => x.date <= date_end);
             }
-            if (format == "csv")
-            {
-                // I have no clue. Docker police pls help!
-            }
-            
             return getData;
         }
 

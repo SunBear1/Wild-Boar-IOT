@@ -8,7 +8,6 @@ namespace WebApi.RabbitMQ;
 public class RabbitMQService
 {
     private readonly IMongoCollection<WildBoarIotData> _dbContext;
-    private int dupa = 5;
     public RabbitMQService(IOptions<WildBoarIotDatabaseSettings> dbContext)
     {
         var mongoClient = new MongoClient(
