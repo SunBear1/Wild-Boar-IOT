@@ -7,9 +7,9 @@ Projekt na przedmiot Serwisy Internetowe .NET
 ### Vue.js (Łukasz)
 
 - [x] przeglądanie zgromadzonych danych w formie tabelarycznej
-- [ ] filtrowanie danych według daty, typu czujnika (grupa instancji), instancji czujnika,
-- [ ] sortowanie danych w tabeli;
-- [ ] pobieranie danych w formacie CSV, JSON dla wybranych filtrów;
+- [x] filtrowanie danych według daty, typu czujnika (grupa instancji), instancji czujnika,
+- [x] sortowanie danych w tabeli;
+- [x] pobieranie danych w formacie CSV, JSON dla wybranych filtrów;
 - [ ] prezentacja danych w formie wykresów dla wybranych filtrów.
 - [ ] pulpit, na którym widać ostatnią wartość i średnią wartość (dla ostatnich 100
    komunikatów) dla każdego sensora - prezentowane dane nie wymagają odświeżania
@@ -21,8 +21,8 @@ Projekt na przedmiot Serwisy Internetowe .NET
 
 - [x] Automatyczne pobieranie danych z kolejek, konwersję danych i ich zapis w bazie danych;
 - [x] Odczyt danych z bazy danych,
-- [ ] Filtrowanie i sortowanie danych na podstawie podanych kryteriów,
-- [ ] Eksport danych (przefiltrowanych, sortowanych) w formacie CSV, JSON
+- [x] Filtrowanie i sortowanie danych na podstawie podanych kryteriów,
+- [x] Eksport danych (przefiltrowanych, sortowanych) w formacie CSV, JSON
 
 ## DATABASE
 
