@@ -18,9 +18,18 @@ namespace WebApi.Controllers
 
         [HttpGet]
         public async Task<List<WildBoarIotData>> Get(string? sort=null, string? type=null, int? weight=null,
-            bool? occupied=null, DateTime? date_start=null, DateTime? date_end=null )
+            bool? occupied=null, DateTime? date_start=null, DateTime? date_end=null, string? order=null )
         {
             var getData = await wildBoarIotDataService.GetAsync();
+
+            if (order != "desc")
+            {
+                getData = getData.OrderBy(x => x.id).ToList();
+            }
+            else
+            {
+                getData = getData.OrderByDescending(x => x.id).ToList();
+            }
             
             if (!sort.IsNull())
             {
