@@ -1,5 +1,8 @@
 <template>
-  <Bar :data="chartData"/>
+  <div class="chart-wrapper">
+    <Bar :data="chartData" :style="myStyles"/>
+  </div>
+
 </template>
 
 <script>
@@ -8,9 +11,18 @@ import {BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title,
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
+
 export default {
   name: 'BarChart',
   components: {Bar},
+  computed: {
+    myStyles() {
+      return {
+        height: '400px',
+        width: '700px',
+      }
+    }
+  },
   props: {
     chartData: {
       type: Object,
@@ -21,6 +33,16 @@ export default {
       default: () => {
       }
     }
-  }
+  },
 }
 </script>
+
+<style scoped>
+
+.chart-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+</style>

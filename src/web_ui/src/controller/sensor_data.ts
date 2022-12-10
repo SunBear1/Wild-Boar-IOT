@@ -20,7 +20,6 @@ export async function get_sensor_data_from_api(data_format: string, url_paramete
                 'Accept': data_format,
             }
         });
-        console.log(response.headers['content-type'])
         return convertToSensorType(response)
     } catch (error) {
         if (error instanceof Error) {
@@ -50,7 +49,6 @@ function convertToSensorType(response: any): SensorType[] {
     } else if (response.headers['content-type'] == "text/csv; charset=utf-8") {
         let arrayFromCSV = CSVtoArray(response.data)
         for (let i = 1; i < arrayFromCSV.length; i++) {
-            console.log(arrayFromCSV[i])
             const data: SensorType = {
                 id: Number(arrayFromCSV[i][0]),
                 type: arrayFromCSV[i][1],

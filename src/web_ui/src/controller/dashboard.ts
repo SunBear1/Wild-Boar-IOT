@@ -12,12 +12,10 @@ export type DashboardType = {
     treadmill_avg_occupancy: number,
 };
 
-export async function get_dashboard_data_from_api(data_format: string, url_parameters?: string) {
+export async function get_dashboard_data_from_api() {
     try {
         const response = await axios.get(DASHBOARD_DATA_API_URL);
-        let dashboard_data: DashboardType
-        dashboard_data.last_msg = SensorType()
-        return response.data
+        return convertToDashboardType(response)
     } catch (error) {
         if (error instanceof Error) {
             console.log('Error message: ', error.message);
@@ -29,7 +27,7 @@ export async function get_dashboard_data_from_api(data_format: string, url_param
     }
 }
 
-function convertToDashboardType(response: any): SensorType[] {
+function convertToDashboardType(response: any) {
     const last_msg: SensorType = {
         id: response.data["lastReceivedMessage"]["id"],
         type: response.data["lastReceivedMessage"]["type"],
@@ -39,7 +37,12 @@ function convertToDashboardType(response: any): SensorType[] {
     };
     const dashboard_data: DashboardType = {
         last_msg: last_msg,
-        biceps_avg_weight: response.data["chest"]
+        biceps_avg_weight: response.data["bicepsAVGweight"],
+        biceps_avg_occupancy: response.data["chestAVGoccupancy"],
+        chest_avg_weight: response.data["chestAVGweight"],
+        chest_avg_occupancy: response.data["chestAVGoccupancy"],
+        treadmill_avg_occupancy: response.data["treadmillAVGoccupancy"],
+        treadmill_avg_weight: response.data["treadmillAVGweight"],
     }
-    return sensor_data
+    return dashboard_data
 }

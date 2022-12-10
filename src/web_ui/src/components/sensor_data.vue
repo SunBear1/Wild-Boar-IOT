@@ -9,19 +9,31 @@
       </div>
     </nav>
 
-    <div id="dashboard" class="dashboard-section">
+    <div id="dashboard" class="dashboard-section" v-if="dashboard_data">
       <p class="main-title">Dashboard</p>
-      <p class="dashboard-small-title">Last received message: <span>{{ }}</span></p>
+      <p class="dashboard-small-title">Last received message:</p>
+      <div class="dashboard-wrapper">
+        <div class="dashboard-container">
+          <p class="dashboard-container-text">ID: <span>{{ dashboard_data.last_msg.id }}</span></p>
+          <p class="dashboard-container-text">Type: <span>{{ dashboard_data.last_msg.type }}</span></p>
+          <p class="dashboard-container-text">Date: <span>{{ dashboard_data.last_msg.date }}</span></p>
+          <p class="dashboard-container-text">Occupancy: <span>{{ dashboard_data.last_msg.occupied }}</span></p>
+          <p class="dashboard-container-text">Weight: <span>{{ dashboard_data.last_msg.weight }}</span></p>
+        </div>
+      </div>
       <br>
       <p class="dashboard-small-title">Avarage values per 100 messages for each type:</p>
       <br>
-      <p class="dashboard-small-title">Chest machine weight: <span>PLACEHOLDER</span></p>
-      <p class="dashboard-small-title">Biceps machine weight: <span>PLACEHOLDER</span></p>
-      <p class="dashboard-small-title">Treadmill weight: <span>PLACEHOLDER</span></p>
+      <p class="dashboard-small-title">Chest machine weight: <span>{{ dashboard_data.chest_avg_weight }}</span></p>
+      <p class="dashboard-small-title">Biceps machine weight: <span>{{ dashboard_data.biceps_avg_weight }}</span></p>
+      <p class="dashboard-small-title">Treadmill weight: <span>{{ dashboard_data.treadmill_avg_weight }}</span></p>
       <br>
-      <p class="dashboard-small-title">Chest machine occupancy: <span>PLACEHOLDER</span></p>
-      <p class="dashboard-small-title">Biceps machine occupancy: <span>PLACEHOLDER</span></p>
-      <p class="dashboard-small-title">Treadmill occupancy: <span>PLACEHOLDER</span></p>
+      <p class="dashboard-small-title">Chest machine occupancy: <span>{{ dashboard_data.chest_avg_occupancy }}</span>
+      </p>
+      <p class="dashboard-small-title">Biceps machine occupancy: <span>{{ dashboard_data.biceps_avg_occupancy }}</span>
+      </p>
+      <p class="dashboard-small-title">Treadmill occupancy: <span>{{ dashboard_data.treadmill_avg_occupancy }}</span>
+      </p>
     </div>
 
     <div id="data" class="data-section">
@@ -105,7 +117,7 @@
 
     <div id="charts" class="charts-section">
       <p class="main-title">Charts</p>
-      <charts chartData="charts_obj"/>
+      <BarChart :chartData="chart_data"/>
     </div>
 
     <div class="footer">
@@ -123,9 +135,11 @@
 import {NAV_CHARTS_TITLE, NAV_DASHBOARD_TITLE, NAV_TABLE_TITLE, NAV_TITLE, TABLE_TITLE} from "@/constants/texts";
 import {onMounted, ref, watch} from 'vue'
 import {get_sensor_data_from_api} from "@/controller/sensor_data";
+import {get_dashboard_data_from_api} from "@/controller/dashboard";
+import {convertToChartData} from "@/controller/charts";
 import {useInterval} from "@vueuse/core";
 import {collect_parameters, parse_parameters} from "@/controller/parameters";
-import Charts from "@/components/charts.vue";
+import BarChart from "@/components/charts.vue";
 
 let rows = ref()
 let sort_input = ref("id")
@@ -136,37 +150,36 @@ let occupancy_input = ref("all")
 let weight_input = ref("")
 let format_input = ref("application/json")
 let sorting_order_input = ref("asc")
+let dashboard_data = ref()
+let chart_data = ref({
+  labels: [],
+  datasets: []
+})
 
-
+let num = 1
 const {counter, pause, resume} = useInterval(1000, {controls: true})
 watch(counter, async () => {
+
   pause()
   let url_parameters: string[] = collect_parameters(sort_input.value, type_input.value, occupancy_input.value, weight_input.value, sorting_order_input.value, date_start_input.value, date_end_input.value)
+  dashboard_data.value = await get_dashboard_data_from_api()
   rows.value = await get_sensor_data_from_api(format_input.value, parse_parameters(url_parameters))
+  chart_data.value = convertToChartData(num)
+  num = num + 1
   resume()
 })
 
+
 function scrollToElement(id: string) {
   const element = document.getElementById(id);
-  console.log(element)
   element!.scrollIntoView({
     behavior: "smooth"
   });
 }
 
-let chart_obj = {
-  labels: ['January', 'February', 'March'],
-  datasets: [
-    {
-      label: 'Data One',
-      backgroundColor: '#f87979',
-      data: [40, 20, 12]
-    }
-  ]
-}
-
 onMounted(async () => {
   rows.value = await get_sensor_data_from_api(format_input.value, parse_parameters([]))
+  chart_data.value = {labels: [], datasets: []}
 })
 
 </script>
@@ -189,6 +202,28 @@ onMounted(async () => {
 
 .dashboard-small-title {
   color: white;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.dashboard-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 5px;
+}
+
+.dashboard-container {
+  background-color: #00C7FD;
+  width: 200px;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border-radius: 15px;
+}
+
+.dashboard-container-text {
+  color: #2E2F32;
   font-size: 1rem;
   text-align: center;
 }
@@ -260,14 +295,14 @@ option {
 select {
   background-color: #00C7FD;
   font-weight: bold;
-  color: #242528;
+  color: #2E2F32;
   border-radius: 5px;
 }
 
 input {
   background-color: #00C7FD;
   font-weight: bold;
-  color: #242528;
+  color: #2E2F32;
   border-radius: 5px;
   padding-left: 5px;
 }
@@ -300,7 +335,7 @@ input {
 th {
   background-color: #00C7FD;
   font-weight: bold;
-  color: #242528;
+  color: #2E2F32;
   font-family: Tahoma, Helvetica, Arial, sans-serif;
   padding: 8px;
   font-size: 14px;
@@ -326,9 +361,8 @@ thead th {
 }
 
 /*Dashboard section*/
-
 .dashboard-section {
-  height: 300px;
+  height: 400px;
   align-items: center;
   justify-content: center;
 }
