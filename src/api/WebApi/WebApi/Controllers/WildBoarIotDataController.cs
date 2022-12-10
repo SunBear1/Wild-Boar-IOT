@@ -24,18 +24,26 @@ namespace WebApi.Controllers
 
             if (order != "desc")
             {
-                getData = getData.OrderBy(x => x.id).ToList();
+                if (!sort.IsNull())
+                {
+                    getData = getData.OrderBy(x => x.GetType().GetProperty(sort).GetValue(x, null)).ToList();
+                }
+                else
+                {
+                    getData = getData.OrderBy(x => x.id).ToList();
+                }
             }
             else
             {
-                getData = getData.OrderByDescending(x => x.id).ToList();
+                if (!sort.IsNull())
+                {
+                    getData = getData.OrderByDescending(x => x.GetType().GetProperty(sort).GetValue(x, null)).ToList();
+                }
+                else
+                {
+                    getData = getData.OrderByDescending(x => x.id).ToList();
+                }
             }
-            
-            if (!sort.IsNull())
-            {
-                getData = getData.OrderBy(x => x.GetType().GetProperty(sort).GetValue(x, null)).ToList();
-            }
-
             if (!type.IsNull())
             {
                 getData = getData.FindAll(x => x.type == type);
