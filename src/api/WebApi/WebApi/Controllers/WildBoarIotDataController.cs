@@ -7,11 +7,11 @@ namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class WildBoarIotDataController : ControllerBase
+    public class data : ControllerBase
     {
         private readonly IWildBoarIotDataService wildBoarIotDataService;
 
-        public WildBoarIotDataController(IWildBoarIotDataService _wildBoarIotDataService)
+        public data(IWildBoarIotDataService _wildBoarIotDataService)
         {
             wildBoarIotDataService = _wildBoarIotDataService;
         }
@@ -63,6 +63,30 @@ namespace WebApi.Controllers
             return getData;
         }
 
+        [HttpGet("/api/dashboard")]
+        public async Task<ActionResult<dashboardData>> Get()
+        {
+            var wildBoarData = await wildBoarIotDataService.GetAsync();
+
+            dashboardData dData = new dashboardData();
+
+            dData.lastReceivedMessage = wildBoarData.OrderByDescending(x => x.id).First();
+            
+            var chest = wildBoarData.FindAll(x => x.type == "CHEST_MACHINE").TakeLast(100);
+            var biceps = wildBoarData.FindAll(x => x.type == "BICEPS_MACHINE").TakeLast(100);
+            var treadmill = wildBoarData.FindAll(x => x.type == "TREADMILL").TakeLast(100);
+            
+            dData.chestAVGweight = chest.Select(x => x.weight).Average();
+            dData.bicepsAVGweight = biceps.Select(x => x.weight).Average();
+            dData.treadmillAVGweight = treadmill.Select(x => x.weight).Average();
+            
+            dData.chestAVGoccupancy = (int)(chest.Select(x => x.occupied ? 1.0 : 0.0).Average() * 100);
+            dData.bicepsAVGoccupancy = (int)(biceps.Select(x => x.occupied ? 1.0 : 0.0).Average() * 100);
+            dData.treadmillAVGoccupancy = (int)(treadmill.Select(x => x.occupied ? 1.0 : 0.0).Average() * 100);
+
+            return dData;
+        }
+        
         [HttpGet("{id}")]
         public async Task<ActionResult<WildBoarIotData>> Get(long id)
         {
