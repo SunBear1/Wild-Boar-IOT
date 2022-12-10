@@ -20,12 +20,12 @@ export function collect_parameters(sort: string, type: string, occupancy: string
         parameters.push("type=" + type)
     }
     if (occupancy !== "all") {
-        parameters.push("occupancy=" + occupancy)
+        parameters.push("occupied=" + occupancy)
     }
-    if (date_start !== undefined) {
+    if (date_start !== undefined && date_start !== "") {
         parameters.push("date_start=" + moment(date_start).format('MM-DD-YYYY'))
     }
-    if (date_end !== undefined) {
+    if (date_end !== undefined && date_end !== "") {
         parameters.push("date_end=" + moment(date_end).format('MM-DD-YYYY'))
     }
     if (weight !== "") {

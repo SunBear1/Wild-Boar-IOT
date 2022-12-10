@@ -33,8 +33,15 @@
             <option value="id">ID</option>
             <option value="type">Type</option>
             <option value="date">Date</option>
-            <option value="occupancy">Occupancy</option>
+            <option value="occupied">Occupancy</option>
             <option value="weight">Weight</option>
+          </select>
+          <br>
+          <br>
+          <p class="filter-title">Sorting order</p>
+          <select name="sorting-order-form" v-model="sorting_order_input">
+            <option value="ascend">Ascending</option>
+            <option value="descend">Descending</option>
           </select>
         </div>
         <div class="filter-div">
@@ -44,6 +51,13 @@
             <option value="CHEST_MACHINE">Chest machine</option>
             <option value="BICEPS_MACHINE">Biceps machine</option>
             <option value="TREADMILL">Treadmill</option>
+          </select>
+          <br>
+          <br>
+          <p class="filter-title">Data format</p>
+          <select name="format-filter-form" v-model="format_input">
+            <option value="application/json">JSON</option>
+            <option value="text/csv">CSV</option>
           </select>
         </div>
         <div class="filter-div">
@@ -86,9 +100,6 @@
             <td>{{ row.weight }}</td>
           </tr>
         </table>
-        <div v-if="isloading">
-          <p>LOADING...</p>
-        </div>
       </div>
     </div>
 
@@ -122,12 +133,14 @@ let date_start_input = ref(undefined)
 let date_end_input = ref(undefined)
 let occupancy_input = ref("all")
 let weight_input = ref("")
+let format_input = ref("application/json")
+let sorting_order_input = ref("ascend")
 
 const {counter, pause, resume} = useInterval(1000, {controls: true})
 watch(counter, async () => {
   pause()
   let url_parameters: string[] = collect_parameters(sort_input.value, type_input.value, occupancy_input.value, weight_input.value, date_start_input.value, date_end_input.value)
-  rows.value = await get_sensor_data_from_api(parse_parameters(url_parameters))
+  rows.value = await get_sensor_data_from_api(format_input.value, parse_parameters(url_parameters))
   resume()
 })
 
@@ -142,7 +155,7 @@ function scrollToElement(id: string) {
 
 
 onMounted(async () => {
-  rows.value = await get_sensor_data_from_api(parse_parameters([]))
+  rows.value = await get_sensor_data_from_api(format_input.value, parse_parameters([]))
 })
 
 </script>
@@ -274,22 +287,21 @@ input {
   height: 400px;
 }
 
-th, td {
-  font-family: Tahoma, Helvetica, Arial, sans-serif;
-  color: white;
-  padding: 8px;
-  font-size: 14px;
-}
-
 th {
   background-color: #00C7FD;
   font-weight: bold;
   color: #242528;
-  height: 2em;
+  font-family: Tahoma, Helvetica, Arial, sans-serif;
+  padding: 8px;
+  font-size: 14px;
 }
 
 td {
   height: 2em;
+  font-family: Tahoma, Helvetica, Arial, sans-serif;
+  color: white;
+  padding: 8px;
+  font-size: 14px;
 }
 
 thead th {
