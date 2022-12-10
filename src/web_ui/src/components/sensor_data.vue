@@ -11,30 +11,62 @@
 
     <div id="dashboard" class="dashboard-section">
       <p class="main-title">Dashboard</p>
+      <p class="dashboard-small-title">Last received message: <span>PLACEHOLDER</span></p>
+      <br>
+      <p class="dashboard-small-title">Avarage values per 100 messages for each type:</p>
+      <br>
+      <p class="dashboard-small-title">Chest machine weight: <span>PLACEHOLDER</span></p>
+      <p class="dashboard-small-title">Biceps machine weight: <span>PLACEHOLDER</span></p>
+      <p class="dashboard-small-title">Treadmill weight: <span>PLACEHOLDER</span></p>
+      <br>
+      <p class="dashboard-small-title">Chest machine occupancy: <span>PLACEHOLDER</span></p>
+      <p class="dashboard-small-title">Biceps machine occupancy: <span>PLACEHOLDER</span></p>
+      <p class="dashboard-small-title">Treadmill occupancy: <span>PLACEHOLDER</span></p>
     </div>
 
     <div id="data" class="data-section">
       <p class="main-title">{{ TABLE_TITLE }}</p>
       <div class="filter-wrapper">
         <div class="sort-div">
-          <p>Sort by:</p>
-          <select name="cars" id="cars">
-            <option value="volvo">ID</option>
-            <option value="volvo">Type</option>
-            <option value="saab">Date</option>
-            <option value="opel">Occupancy</option>
-            <option value="audi">Weight</option>
+          <p class="filter-title">Sort by</p>
+          <select name="sorting-form" id="sort" v-model="sort_input">
+            <option value="id">ID</option>
+            <option value="type">Type</option>
+            <option value="date">Date</option>
+            <option value="occupancy">Occupancy</option>
+            <option value="weight">Weight</option>
           </select>
         </div>
         <div class="filter-div">
-          <p>Filter:</p>
-          <select name="cars" id="cars">
-            <option value="volvo">ID</option>
-            <option value="volvo">Type</option>
-            <option value="saab">Date</option>
-            <option value="opel">Occupancy</option>
-            <option value="audi">Weight</option>
+          <p class="filter-title">Type</p>
+          <select name="filtering-form" id="filter" v-model="type_input">
+            <option value="all">All</option>
+            <option value="CHEST_MACHINE">Chest machine</option>
+            <option value="BICEPS_MACHINE">Biceps machine</option>
+            <option value="TREADMILL">Treadmill</option>
           </select>
+        </div>
+        <div class="filter-div">
+          <p class="filter-title">From</p>
+          <input type="date" name="date-start-filter-form"
+                 min="01-01-2021" max="12-31-2021" v-model="date_start_input">
+          <br>
+          <br>
+          <p class="filter-title">To the</p>
+          <input type="date" name="date-end-filter-form"
+                 min="01-02-2021" max="01-01-2022" v-model="date_end_input">
+        </div>
+        <div class="filter-div">
+          <p class="filter-title">Occupancy</p>
+          <select name="occupancy-filter-form" v-model="occupancy_input">
+            <option value="all">All</option>
+            <option value="true">True</option>
+            <option value="false">False</option>
+          </select>
+          <br>
+          <br>
+          <p class="filter-title">Weight</p>
+          <input name="weight-filter-form" type="number" min="0" step="1" v-model="weight_input">
         </div>
       </div>
       <div class="scroll">
@@ -80,14 +112,24 @@ import {NAV_CHARTS_TITLE, NAV_DASHBOARD_TITLE, NAV_TABLE_TITLE, NAV_TITLE, TABLE
 import {onMounted, ref, watch} from 'vue'
 import {get_sensor_data_from_api} from "@/controller/sensor_data";
 import {useInterval} from "@vueuse/core";
+import {collect_parameters, parse_parameters} from "@/controller/parameters";
+
+
+let rows = ref()
+let sort_input = ref("id")
+let type_input = ref("all")
+let date_start_input = ref(undefined)
+let date_end_input = ref(undefined)
+let occupancy_input = ref("all")
+let weight_input = ref("")
 
 const {counter, pause, resume} = useInterval(1000, {controls: true})
 watch(counter, async () => {
   pause()
-  rows.value = await get_sensor_data_from_api()
+  let url_parameters: string[] = collect_parameters(sort_input.value, type_input.value, occupancy_input.value, weight_input.value, date_start_input.value, date_end_input.value)
+  rows.value = await get_sensor_data_from_api(parse_parameters(url_parameters))
   resume()
 })
-
 
 function scrollToElement(id: string) {
   const element = document.getElementById(id);
@@ -97,10 +139,10 @@ function scrollToElement(id: string) {
   });
 }
 
-let rows = ref()
+
 
 onMounted(async () => {
-  rows.value = await get_sensor_data_from_api()
+  rows.value = await get_sensor_data_from_api(parse_parameters([]))
 })
 
 </script>
@@ -110,21 +152,22 @@ onMounted(async () => {
 
 .overlay {
   background-color: #242528;
-  /*position: fixed;*/
-  /*z-index: 1;*/
   width: 100%;
-  /*height: 100%;*/
-  /*top: 0;*/
-  /*left: 0;*/
-  /*overflow-y: auto;*/
 }
 
 .main-title {
   margin-top: 10px;
+  margin-bottom: 20px;
   text-align: center;
   font-size: 1.5rem;
   color: white;
   font-family: Tahoma, Helvetica, Arial, sans-serif;
+}
+
+.dashboard-small-title {
+  color: white;
+  font-size: 1rem;
+  text-align: center;
 }
 
 .footer {
@@ -179,6 +222,31 @@ onMounted(async () => {
   margin-right: auto;
   float: right;
   width: 100%;
+}
+
+.filter-title {
+  color: white;
+  font-size: 14px;
+}
+
+option {
+  background-color: #2E2F32;
+  color: white;
+}
+
+select {
+  background-color: #00C7FD;
+  font-weight: bold;
+  color: #242528;
+  border-radius: 5px;
+}
+
+input {
+  background-color: #00C7FD;
+  font-weight: bold;
+  color: #242528;
+  border-radius: 5px;
+  padding-left: 5px;
 }
 
 .data-section {

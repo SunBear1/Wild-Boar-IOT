@@ -39,8 +39,8 @@ public class RabbitMQConsumer : BackgroundService
             UserName="admin",
             Password = "1234",
             VirtualHost = "/vhost1",
-            HostName = "message_broker",
-            Port = 5672,
+            HostName = "localhost",
+            Port = 17998,
         };
         connection = factory.CreateConnection();
         channel = connection.CreateModel();

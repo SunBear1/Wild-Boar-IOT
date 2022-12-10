@@ -9,10 +9,13 @@ export type SensorType = {
     date: string
 };
 
-export async function get_sensor_data_from_api() {
-    console.log("siema")
+export async function get_sensor_data_from_api(url_parameters?: string) {
+    let URL = API_URL
+    if (typeof url_parameters !== 'undefined') {
+        URL = URL + url_parameters
+    }
     try {
-        const response = await axios.get(API_URL);
+        const response = await axios.get(URL);
         let sensor_data: SensorType[] = []
         for (let i = 0; i < response.data.length; i++) {
             const data: SensorType = {
