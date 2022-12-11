@@ -158,16 +158,34 @@ let format_input = ref("application/json")
 let sorting_order_input = ref("asc")
 let dashboard_data = ref()
 let bar_chart_data = ref({
-  labels: [],
-  datasets: []
+  labels: ['Chest machine', 'Biceps machine', 'Treadmill'],
+  datasets: [
+    {
+      label: 'Average weight on the machine over all months',
+      backgroundColor: '#00C7FD',
+      data: [0, 0, 0]
+    }
+  ]
 })
 let doughnut_chart_data = ref({
-  labels: [],
-  datasets: []
+  labels: ['Occupied', 'Non occupied'],
+  datasets: [
+    {
+      label: 'Average occupancy of the machine(s) over all months',
+      backgroundColor: ['#F84F31', '#23C552'],
+      data: [0, 1]
+    }
+  ]
 })
 let line_chart_data = ref({
-  labels: [],
-  datasets: []
+  labels: [""],
+  datasets: [
+    {
+      label: 'Chest machine average weight',
+      backgroundColor: '#00C7FD',
+      data: [0]
+    },
+  ]
 })
 
 const {counter, pause, resume} = useInterval(1000, {controls: true})
