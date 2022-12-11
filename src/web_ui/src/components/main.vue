@@ -18,7 +18,7 @@
           <p class="dashboard-container-text">Type: <span>{{ dashboard_data.last_msg.type }}</span></p>
           <p class="dashboard-container-text">Date: <span>{{ dashboard_data.last_msg.formattedDate }}</span></p>
           <p class="dashboard-container-text">Occupancy: <span>{{ dashboard_data.last_msg.occupied }}</span></p>
-          <p class="dashboard-container-text">Weight: <span>{{ dashboard_data.last_msg.weight }}</span></p>
+          <p class="dashboard-container-text">Weight: <span>{{ dashboard_data.last_msg.weight }}</span>kg</p>
         </div>
       </div>
       <br>
@@ -102,7 +102,7 @@
             <th>Type</th>
             <th>Date</th>
             <th>Occupancy</th>
-            <th>Weight</th>
+            <th>Weight[kg]</th>
           </tr>
           <tr v-for="row in rows">
             <td>{{ row.id }}</td>

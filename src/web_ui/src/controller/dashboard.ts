@@ -40,7 +40,7 @@ function convertToDashboardType(response: any) {
     const dashboard_data: DashboardType = {
         last_msg: last_msg,
         biceps_avg_weight: response.data["bicepsAVGweight"],
-        biceps_avg_occupancy: response.data["chestAVGoccupancy"],
+        biceps_avg_occupancy: response.data["bicepsAVGoccupancy"],
         chest_avg_weight: response.data["chestAVGweight"],
         chest_avg_occupancy: response.data["chestAVGoccupancy"],
         treadmill_avg_occupancy: response.data["treadmillAVGoccupancy"],

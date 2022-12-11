@@ -57,9 +57,11 @@ function convertToSensorType(response: any): SensorType[] {
                 weight: Number(arrayFromCSV[i][2]),
                 occupied: parseOccupancy(arrayFromCSV[i][3]),
                 rawDate: new Date(arrayFromCSV[i][4]),
-                formattedDate: toFormattedDate(new Date(response.data[i].date)),
+                formattedDate: arrayFromCSV[i][4],
             };
-            sensor_data.push(data)
+            if (data.type !== undefined) {
+                sensor_data.push(data)
+            }
         }
     }
     return sensor_data
@@ -108,8 +110,11 @@ export function toFormattedDate(raw_date: Date): string {
 }
 
 export function parseOccupancy(value: string): string {
-    if (Boolean(value)) {
-        return "Occupied"
+    if (value !== undefined) {
+        if (value.toString() === "true" || value.toString() === "True") {
+            return "Occupied"
+        }
+        return "Available"
     }
-    return "Available"
+    return "XD"
 }

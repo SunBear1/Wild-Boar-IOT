@@ -24,8 +24,9 @@ export function prepareBarChartData(raw_data: SensorType[]) {
                 backgroundColor: '#00C7FD',
                 data: [chest_avg_weight, biceps_avg_weight, treadmill_avg_weight]
             }
-        ]
+        ],
     }
+
 }
 
 export function prepareDoughnutChartData(raw_data: SensorType[]) {
@@ -103,6 +104,6 @@ export function prepareLineChartData(raw_data: SensorType[]) {
                 backgroundColor: '#FC1962',
                 data: treadmill_avg_weights
             },
-        ]
+        ],
     }
 }
