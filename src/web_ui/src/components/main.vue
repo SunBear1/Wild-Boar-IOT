@@ -16,7 +16,7 @@
         <div class="dashboard-container">
           <p class="dashboard-container-text">ID: <span>{{ dashboard_data.last_msg.id }}</span></p>
           <p class="dashboard-container-text">Type: <span>{{ dashboard_data.last_msg.type }}</span></p>
-          <p class="dashboard-container-text">Date: <span>{{ dashboard_data.last_msg.date }}</span></p>
+          <p class="dashboard-container-text">Date: <span>{{ dashboard_data.last_msg.formattedDate }}</span></p>
           <p class="dashboard-container-text">Occupancy: <span>{{ dashboard_data.last_msg.occupied }}</span></p>
           <p class="dashboard-container-text">Weight: <span>{{ dashboard_data.last_msg.weight }}</span></p>
         </div>
@@ -28,11 +28,11 @@
       <p class="dashboard-small-title">Biceps machine weight: <span>{{ dashboard_data.biceps_avg_weight }}</span></p>
       <p class="dashboard-small-title">Treadmill weight: <span>{{ dashboard_data.treadmill_avg_weight }}</span></p>
       <br>
-      <p class="dashboard-small-title">Chest machine occupancy: <span>{{ dashboard_data.chest_avg_occupancy }}</span>
+      <p class="dashboard-small-title">Chest machine occupancy: <span>{{ dashboard_data.chest_avg_occupancy }}</span>%
       </p>
-      <p class="dashboard-small-title">Biceps machine occupancy: <span>{{ dashboard_data.biceps_avg_occupancy }}</span>
+      <p class="dashboard-small-title">Biceps machine occupancy: <span>{{ dashboard_data.biceps_avg_occupancy }}</span>%
       </p>
-      <p class="dashboard-small-title">Treadmill occupancy: <span>{{ dashboard_data.treadmill_avg_occupancy }}</span>
+      <p class="dashboard-small-title">Treadmill occupancy: <span>{{ dashboard_data.treadmill_avg_occupancy }}</span>%
       </p>
     </div>
 
@@ -86,8 +86,8 @@
           <p class="filter-title">Occupancy</p>
           <select v-model="occupancy_input" name="occupancy-filter-form">
             <option value="all">All</option>
-            <option value="true">True</option>
-            <option value="false">False</option>
+            <option value="true">Occupied</option>
+            <option value="false">Available</option>
           </select>
           <br>
           <br>
@@ -107,7 +107,7 @@
           <tr v-for="row in rows">
             <td>{{ row.id }}</td>
             <td>{{ row.type }}</td>
-            <td>{{ row.date }}</td>
+            <td>{{ row.formattedDate }}</td>
             <td>{{ row.occupied }}</td>
             <td>{{ row.weight }}</td>
           </tr>
@@ -140,7 +140,7 @@ import {NAV_CHARTS_TITLE, NAV_DASHBOARD_TITLE, NAV_TABLE_TITLE, NAV_TITLE, TABLE
 import {onMounted, ref, watch} from 'vue'
 import {get_sensor_data_from_api} from "@/controller/sensor_data";
 import {get_dashboard_data_from_api} from "@/controller/dashboard";
-import {prepareBarChartData, prepareDoughNutChartData} from "@/controller/charts";
+import {prepareBarChartData, prepareDoughnutChartData, prepareLineChartData} from "@/controller/charts";
 import {useInterval} from "@vueuse/core";
 import {collect_parameters, parse_parameters} from "@/controller/parameters";
 import BarChart from "@/components/bar_chart.vue";
@@ -166,19 +166,8 @@ let doughnut_chart_data = ref({
   datasets: []
 })
 let line_chart_data = ref({
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'November', 'December'],
-  datasets: [
-    {
-      label: 'Chest machine',
-      backgroundColor: '#f87979',
-      data: [40, 39, 10,12,13,0,15,20,30,50,0,25]
-    },
-    {
-      label: 'Biceps machine',
-      backgroundColor: 'rgba(27,144,229,0.89)',
-      data: [50, 69, 20,12,23,0,15,30,40,10,0,5]
-    },
-  ]
+  labels: [],
+  datasets: []
 })
 
 const {counter, pause, resume} = useInterval(1000, {controls: true})
@@ -188,7 +177,8 @@ watch(counter, async () => {
   dashboard_data.value = await get_dashboard_data_from_api()
   rows.value = await get_sensor_data_from_api(format_input.value, parse_parameters(url_parameters))
   bar_chart_data.value = prepareBarChartData(rows.value)
-  doughnut_chart_data.value = prepareDoughNutChartData(rows.value)
+  doughnut_chart_data.value = prepareDoughnutChartData(rows.value)
+  line_chart_data.value = prepareLineChartData(rows.value)
   resume()
 })
 
@@ -203,7 +193,8 @@ function scrollToElement(id: string) {
 onMounted(async () => {
   rows.value = await get_sensor_data_from_api(format_input.value, parse_parameters([]))
   bar_chart_data.value = prepareBarChartData(rows.value)
-  doughnut_chart_data.value = prepareDoughNutChartData(rows.value)
+  doughnut_chart_data.value = prepareDoughnutChartData(rows.value)
+  line_chart_data.value = prepareLineChartData(rows.value)
 })
 
 </script>

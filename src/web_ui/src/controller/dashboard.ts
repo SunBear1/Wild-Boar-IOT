@@ -1,6 +1,7 @@
 import {DASHBOARD_DATA_API_URL} from "@/constants/endpoints";
 import axios from "axios";
 import type {SensorType} from "@/controller/sensor_data";
+import {parseOccupancy, toFormattedDate} from "@/controller/sensor_data";
 
 export type DashboardType = {
     last_msg: SensorType,
@@ -32,8 +33,9 @@ function convertToDashboardType(response: any) {
         id: response.data["lastReceivedMessage"]["id"],
         type: response.data["lastReceivedMessage"]["type"],
         weight: response.data["lastReceivedMessage"]["weight"],
-        occupied: response.data["lastReceivedMessage"]["occupied"],
-        date: response.data["lastReceivedMessage"]["date"],
+        occupied: parseOccupancy(response.data["lastReceivedMessage"]["occupied"]),
+        rawDate: response.data["lastReceivedMessage"]["date"],
+        formattedDate: toFormattedDate(new Date(response.data["lastReceivedMessage"]["date"])),
     };
     const dashboard_data: DashboardType = {
         last_msg: last_msg,
