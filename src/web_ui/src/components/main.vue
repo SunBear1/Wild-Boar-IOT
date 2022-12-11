@@ -119,7 +119,10 @@
       <p class="main-title">Charts</p>
       <BarChart :chartData="bar_chart_data"/>
       <br>
+      <br>
       <Doughnut_chart :chartData="doughnut_chart_data"/>
+      <br>
+      <br>
       <br>
       <LineChart :chart-data="line_chart_data"/>
     </div>
@@ -168,7 +171,7 @@ let bar_chart_data = ref({
   ]
 })
 let doughnut_chart_data = ref({
-  labels: ['Occupied', 'Non occupied'],
+  labels: ['Occupied', 'Available'],
   datasets: [
     {
       label: 'Average occupancy of the machine(s) over all months',
@@ -293,7 +296,7 @@ onMounted(async () => {
 }
 
 .filter-wrapper {
-  margin-top: 40px;
+  margin-top: 50px;
   width: 750px;
   display: flex;
   justify-content: center;
@@ -390,7 +393,7 @@ thead th {
 /*Charts section*/
 
 .charts-section {
-  height: 1300px;
+  height: 1400px;
 }
 
 /*Dashboard section*/

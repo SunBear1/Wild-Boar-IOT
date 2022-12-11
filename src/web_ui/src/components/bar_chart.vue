@@ -1,6 +1,8 @@
 <template>
   <div class="chart-wrapper">
-    <Bar :data="chartData" :style="myStyles"/>
+    <div class="chart-color">
+      <Bar :data="chartData" :style="myStyles"/>
+    </div>
   </div>
 
 </template>
@@ -40,6 +42,14 @@ export default {
 <style scoped>
 
 .chart-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chart-color {
+  width: 750px;
+  background-color: #2E2F32 !important;
   display: flex;
   align-items: center;
   justify-content: center;

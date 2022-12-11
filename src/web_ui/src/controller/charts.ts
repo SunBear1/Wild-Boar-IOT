@@ -37,7 +37,7 @@ export function prepareDoughnutChartData(raw_data: SensorType[]) {
     }
     avg_occupancy /= raw_data.length
     return {
-        labels: ['Occupied', 'Non occupied'],
+        labels: ['Occupied', 'Available'],
         datasets: [
             {
                 label: 'Average occupancy of the machine(s) over all months',
@@ -67,10 +67,10 @@ export function prepareLineChartData(raw_data: SensorType[]) {
     }
 
     for (let i = 0; i < raw_data.length; i++) {
-        if (raw_data[i].type == "BICEPS_MACHINE") {
+        if (raw_data[i].type == "CHEST_MACHINE") {
             chest_avg_weights[raw_data[i].rawDate.getMonth()] += raw_data[i].weight
             chest_avg_counter[raw_data[i].rawDate.getMonth()]++
-        } else if (raw_data[i].type == "CHEST_MACHINE") {
+        } else if (raw_data[i].type == "BICEPS_MACHINE") {
             biceps_avg_weights[raw_data[i].rawDate.getMonth()] += raw_data[i].weight
             biceps_avg_counter[raw_data[i].rawDate.getMonth()]++
         } else if (raw_data[i].type == "TREADMILL") {

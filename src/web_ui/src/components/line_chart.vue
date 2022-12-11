@@ -1,21 +1,15 @@
 <template>
   <div class="chart-wrapper">
-    <Line :data="chartData" :style="myStyles" />
+    <div class="chart-color">
+      <Line :data="chartData" :style="myStyles"/>
+    </div>
+
   </div>
 </template>
 
 <script lang="ts">
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-} from 'chart.js'
-import { Line } from 'vue-chartjs'
+import {CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip} from 'chart.js'
+import {Line} from 'vue-chartjs'
 
 ChartJS.register(
     CategoryScale,
@@ -55,6 +49,14 @@ export default {
 <style scoped>
 
 .chart-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chart-color {
+  width: 750px;
+  background-color: #2E2F32 !important;
   display: flex;
   align-items: center;
   justify-content: center;
