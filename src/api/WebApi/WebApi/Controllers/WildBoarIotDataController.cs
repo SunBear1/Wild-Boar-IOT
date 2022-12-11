@@ -67,19 +67,19 @@ public class data : ControllerBase
 
         if (chest.Count > 0)
         {
-            dData.chestAVGweight = chest.Select(x => x.weight).Average();
+            dData.chestAVGweight = Math.Round(chest.Select(x => x.weight).Average(), 2);
             dData.chestAVGoccupancy = (int) (chest.Select(x => x.occupied ? 1.0 : 0.0).Average() * 100);
         }
 
         if (biceps.Count > 0)
         {
-            dData.bicepsAVGweight = biceps.Select(x => x.weight).Average();
+            dData.bicepsAVGweight = Math.Round(biceps.Select(x => x.weight).Average(), 2);
             dData.bicepsAVGoccupancy = (int) (biceps.Select(x => x.occupied ? 1.0 : 0.0).Average() * 100);
         }
 
         if (treadmill.Count > 0)
         {
-            dData.treadmillAVGweight = treadmill.Select(x => x.weight).Average();
+            dData.treadmillAVGweight = Math.Round(treadmill.Select(x => x.weight).Average(), 2);
             dData.treadmillAVGoccupancy = (int) (treadmill.Select(x => x.occupied ? 1.0 : 0.0).Average() * 100);
         }
 
