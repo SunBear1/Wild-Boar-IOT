@@ -120,6 +120,8 @@
       <BarChart :chartData="bar_chart_data"/>
       <br>
       <Doughnut_chart :chartData="doughnut_chart_data"/>
+      <br>
+      <LineChart :chart-data="line_chart_data"/>
     </div>
 
     <div class="footer">
@@ -143,6 +145,7 @@ import {useInterval} from "@vueuse/core";
 import {collect_parameters, parse_parameters} from "@/controller/parameters";
 import BarChart from "@/components/bar_chart.vue";
 import Doughnut_chart from "@/components/doughnut_chart.vue";
+import LineChart from "@/components/line_chart.vue";
 
 let rows = ref()
 let sort_input = ref("id")
@@ -159,12 +162,22 @@ let bar_chart_data = ref({
   datasets: []
 })
 let doughnut_chart_data = ref({
-  labels: ['VueJs', 'EmberJs', 'ReactJs', 'AngularJs'],
+  labels: [],
+  datasets: []
+})
+let line_chart_data = ref({
+  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'November', 'December'],
   datasets: [
     {
-      backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
-      data: [40, 20, 80, 10]
-    }
+      label: 'Chest machine',
+      backgroundColor: '#f87979',
+      data: [40, 39, 10,12,13,0,15,20,30,50,0,25]
+    },
+    {
+      label: 'Biceps machine',
+      backgroundColor: 'rgba(27,144,229,0.89)',
+      data: [50, 69, 20,12,23,0,15,30,40,10,0,5]
+    },
   ]
 })
 
@@ -189,7 +202,8 @@ function scrollToElement(id: string) {
 
 onMounted(async () => {
   rows.value = await get_sensor_data_from_api(format_input.value, parse_parameters([]))
-  bar_chart_data.value = {labels: [], datasets: []}
+  bar_chart_data.value = prepareBarChartData(rows.value)
+  doughnut_chart_data.value = prepareDoughNutChartData(rows.value)
 })
 
 </script>
@@ -367,7 +381,7 @@ thead th {
 /*Charts section*/
 
 .charts-section {
-  height: 1200px;
+  height: 1300px;
 }
 
 /*Dashboard section*/
