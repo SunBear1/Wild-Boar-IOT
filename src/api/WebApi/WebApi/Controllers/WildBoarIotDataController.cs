@@ -72,9 +72,9 @@ namespace WebApi.Controllers
 
             dData.lastReceivedMessage = wildBoarData.OrderByDescending(x => x.id).First();
             
-            var chest = wildBoarData.FindAll(x => x.type == "CHEST_MACHINE").TakeLast(100);
-            var biceps = wildBoarData.FindAll(x => x.type == "BICEPS_MACHINE").TakeLast(100);
-            var treadmill = wildBoarData.FindAll(x => x.type == "TREADMILL").TakeLast(100);
+            var chest = wildBoarData.FindAll(x => x.type == "CHEST_MACHINE").TakeLast(100).ToList();
+            var biceps = wildBoarData.FindAll(x => x.type == "BICEPS_MACHINE").TakeLast(100).ToList();
+            var treadmill = wildBoarData.FindAll(x => x.type == "TREADMILL").TakeLast(100).ToList();
             
             dData.chestAVGweight = chest.Select(x => x.weight).Average();
             dData.bicepsAVGweight = biceps.Select(x => x.weight).Average();
