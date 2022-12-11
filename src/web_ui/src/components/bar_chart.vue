@@ -5,7 +5,7 @@
 
 </template>
 
-<script>
+<script lang="ts">
 import {Bar} from 'vue-chartjs'
 import {BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip} from 'chart.js'
 
