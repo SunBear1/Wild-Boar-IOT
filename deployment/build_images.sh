@@ -4,12 +4,14 @@ cd ..
 echo "Finished building web_ui image"
 
 echo "Building rabbitMQ image..."
-cd ../src/rabbitmq; docker build -t malajski/wildboar-iot-gym:message-broker .;
+cd ../src/rabbitmq
+docker build -t malajski/wildboar-iot-gym:message-broker .
 cd ..
 echo "Finished building rabbitMQ image"
 
 echo "Building mongoDB image..."
-cd ../src/mongodb; docker build -t malajski/wildboar-iot-gym:database .;
+cd ../src/mongodb
+docker build -t malajski/wildboar-iot-gym:database .;
 cd ..
 echo "Finished building mongoDB image"
 

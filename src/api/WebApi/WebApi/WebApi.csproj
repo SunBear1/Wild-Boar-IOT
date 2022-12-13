@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="ChoETL.JSON" Version="1.2.1.50" />
         <PackageReference Include="MassTransit.MongoDb" Version="8.0.9-develop.643" />
         <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.9-develop.653" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0" />
@@ -15,8 +16,10 @@
         <PackageReference Include="MongoDB.Driver" Version="2.18.0" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.2-beta2" />
         <PackageReference Include="RabbitMQ.Client" Version="6.4.0" />
+        <PackageReference Include="ServiceStack.Text" Version="6.4.0" />
         <PackageReference Include="SQL" Version="1.0.0.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+        <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.4.0" />
     </ItemGroup>
 
 </Project>
